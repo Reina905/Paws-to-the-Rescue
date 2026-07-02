@@ -6,15 +6,17 @@
   --color-tertiary: #F19372;
   --color-primary-light: #FFD9CE;
   --color-secondary-light: #FFEDE8;
+  --color-tertiary-light: #fdf3f1;
   --color-primary-dark: #763219;
+  --color-text-primary: #D2795B;
 }
 
 :root{
   margin: 0;
   padding: 0;
+  background-color: white;
 }
 
 body{
   font-family: "Poppins", sans-serif;
 }
-

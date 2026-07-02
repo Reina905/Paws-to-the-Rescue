@@ -16,7 +16,9 @@ export const Header = () => {
 
         <div className='hero-information flex flex-col relative justify-center items-center font-semibold gap-3 mt-auto mb-15'>   
             <div className='mx-30 mb-5'>
-                <h1 className='text-center text-secondary text-5xl/15 font-extrabold'>Become a hero for {<img src={OrangeCatCartoon} className='inline-block w-11 h-12 align-baseline'></img>} in need </h1>
+                <h1 className='text-center text-secondary text-5xl/15 font-extrabold'>
+                    Become a hero for {<img src={OrangeCatCartoon} className='inline-block w-15 h-16 align-baseline'></img>} <span className='underline'>in need!</span>
+                </h1>
                 <h4 className='text-center text-lg/8 font-bold'>Connect with shelters, volunteer your time, and help cats receive the care and love they deserve</h4>
             </div>
 
