@@ -2,9 +2,12 @@ import React from "react"
 import { Layout } from "../components/Layout/Layout"
 import { VolunteeringCard } from "../components/VolunteeringCard"
 import { volunteeringData } from "../service/volunteeringData"
+import { Navbar } from "../components/Navbar/Navbar"
 
 export const Volunteering = () => {
   return (
+    <>
+    <Navbar />
     <section className="bg-tertiary-light py-24">
       <Layout>
 
@@ -28,5 +31,6 @@ export const Volunteering = () => {
 
       </Layout>
     </section>
+    </>
   )
 }

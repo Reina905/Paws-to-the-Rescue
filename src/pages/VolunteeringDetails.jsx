@@ -2,6 +2,7 @@ import React from "react"
 import { useParams } from "react-router-dom"
 import { volunteeringData } from "../service/volunteeringData"
 import { Layout } from "../components/Layout/Layout"
+import { Navbar } from "../components/Navbar/Navbar"
 
 export const VolunteeringDetails = () => {
   const { id } = useParams()
@@ -13,6 +14,8 @@ export const VolunteeringDetails = () => {
   }
 
   return (
+    <>
+    <Navbar/>
     <section className="bg-tertiary-light py-24">
       <Layout>
 
@@ -56,5 +59,6 @@ export const VolunteeringDetails = () => {
 
       </Layout>
     </section>
+    </>
   )
 }

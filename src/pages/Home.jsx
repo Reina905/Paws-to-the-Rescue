@@ -7,6 +7,7 @@ import { VolunteeringCard } from "../components/VolunteeringCard"
 import catImage from "/src/assets/VolunteerFeedingCats.PNG"
 import { VolunteerCard } from '../components/VolunteerCard'
 import { Footer } from "../components/Footer"
+import { JoinCommunity } from '../components/JoinCommunity'
 
 export const Home = () => {
   const volunteers = [
@@ -214,6 +215,7 @@ export const Home = () => {
               <VolunteerCard volunteer={volunteers[2]} />
             </div>
 
+            <JoinCommunity />
           </Layout>
         </section>
       </main>

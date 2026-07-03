@@ -15,7 +15,7 @@ export const VolunteerCard = ({ volunteer, featured = false }) => {
         rounded-[36px]
         shadow-[0_15px_40px_rgba(0,0,0,.08)]
         flex flex-col items-center
-        ${featured ? "w-[360px] h-[500px] pt-20" : "w-[300px] h-[390px] pt-16"}
+        ${featured ? "w-90 h-125 pt-20" : "w-75 h-97.5 pt-16"}
       `}
     >
       {/* icono superior */}

@@ -6,6 +6,7 @@ import { Volunteering } from "./pages/Volunteering"
 import { VolunteeringDetails } from "./pages/VolunteeringDetails"
 import { Shelters } from "./pages/Shelters"
 import { AboutUs } from "./pages/AboutUs"
+import { ShelterDetail } from "./pages/ShelterDetail"
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
         <Route path="/volunteering" element={<Volunteering />} />
         <Route path="/volunteering/:id" element={<VolunteeringDetails />} />
         <Route path="/shelters" element={<Shelters />} />
+        <Route path="/shelters/:id" element={<ShelterDetail />} />
         <Route path="/about-us" element={<AboutUs />} />
       </Routes>
     </BrowserRouter>
