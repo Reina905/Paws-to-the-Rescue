@@ -1,6 +1,5 @@
 import React from 'react'
 import { Navbar } from './Navbar/Navbar'
-import headerBackgroundVideo from '../assets/headerBackground.mp4';
 import { Link } from 'react-router-dom';
 import OrangeCatCartoon  from '/src/assets/OrangeCatCartoon.png'
 
@@ -10,7 +9,7 @@ export const Header = () => {
     <header className="w-full h-screen flex flex-col text-white font-semibold">
         <Navbar />
         <video autoPlay muted loop playsInline className="absolute top-0 -z-1 w-full h-full object-cover">
-            <source src={headerBackgroundVideo} type="video/mp4" />
+            <source src="https://nlkcuneetsqclvqvlcjb.supabase.co/storage/v1/object/public/MultimediaResources/HeroBackground.mp4" type="video/mp4" />
             Your browser can't reproduce videos
         </video>
 

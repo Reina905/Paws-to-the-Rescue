@@ -19,7 +19,7 @@ export const AboutSection = () => {
             <img
               src={aboutImage}
               alt="Volunteers caring for rescued cats"
-              className="rounded-[32px] shadow-2xl w-full h-[600px] object-cover"
+              className="rounded-4xl shadow-2xl w-full h-150 object-cover"
             />
 
             <div className="absolute -bottom-8 -right-8 bg-primary text-white rounded-3xl shadow-xl p-6 max-w-[220px]">

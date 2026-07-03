@@ -7,6 +7,10 @@ import { VolunteeringDetails } from "./pages/VolunteeringDetails"
 import { Shelters } from "./pages/Shelters"
 import { AboutUs } from "./pages/AboutUs"
 import { ShelterDetail } from "./pages/ShelterDetail"
+import { VolunteerDashboard } from "./pages/VolunteerDashboard"
+import { ShelterDashboard } from "./pages/ShelterDashboard"
+import { VolunteerApplications } from "./pages/VolunteerApplications"
+import { NotFound } from "./pages/NotFound"
 
 export default function App() {
   return (
@@ -20,6 +24,10 @@ export default function App() {
         <Route path="/shelters" element={<Shelters />} />
         <Route path="/shelters/:id" element={<ShelterDetail />} />
         <Route path="/about-us" element={<AboutUs />} />
+        <Route path="/volunteer-dashboard" element={<VolunteerDashboard />} />     
+        <Route path="/volunteer-applications" element={<VolunteerApplications />} />
+        <Route path="/shelter-dashboard" element={<ShelterDashboard />} />
+        <Route path="/not-found" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   )

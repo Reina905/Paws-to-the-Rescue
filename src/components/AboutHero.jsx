@@ -5,7 +5,7 @@ import heroImage from "../assets/VolunteerFeedingCats.PNG";
 
 export const AboutHero = () => {
   return (
-    <section className="relative h-[70vh] min-h-[600px] flex items-center">
+    <section className="relative h-[70vh] min-h-150 flex items-center">
       {/* Background */}
       <img
         src={heroImage}
