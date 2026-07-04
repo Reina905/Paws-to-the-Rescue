@@ -1,5 +1,5 @@
 import React from "react";
-import { Layout } from "../components/Layout/Layout";
+import { PaddingLayout } from "../layouts/PaddingLayout";
 import { useNavigate } from "react-router-dom";
 import { Home, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
@@ -9,7 +9,7 @@ export const NotFound = () => {
 
   return (
     <main className="min-h-screen bg-tertiary-light flex items-center">
-      <Layout>
+      <PaddingLayout>
 
         <div className="flex flex-col items-center text-center">
 
@@ -70,7 +70,7 @@ export const NotFound = () => {
 
         </div>
 
-      </Layout>
+      </PaddingLayout>
     </main>
   );
 };
