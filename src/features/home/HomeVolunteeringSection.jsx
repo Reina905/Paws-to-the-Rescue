@@ -55,7 +55,7 @@ const MOCK_OPPORTUNITIES = [
 
 export const HomeVolunteeringSection = () => {
   return (
-    <section className="bg-tertiary-light py-24 px-10">
+    <section className=" py-24 px-10">
       <SectionHeader
         title="Volunteer Opportunities"
         subtitle="Find active opportunities to help shelters and make a real impact in the lives of rescued cats."

@@ -9,7 +9,7 @@ const MOCK_VOLUNTEERS = [
 
 export const HomeVolunteersOfMonth = () => {
   return (
-    <section className="bg-[#FCF7F5] py-24">
+    <section className="py-24">
       <PaddingLayout>
         <div className="text-center mb-20">
           <h2 className="text-4xl font-bold">Volunteers of the Month</h2>

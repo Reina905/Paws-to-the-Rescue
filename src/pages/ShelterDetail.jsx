@@ -45,8 +45,8 @@ const MOCK_OPPORTUNITIES = [
 export const ShelterDetail = () => {
   return (
     <>
-    <Navbar/>
-      <main className="bg-tertiary-light min-h-screen">
+    <Navbar variant="light" />
+      <main className="">
         <PaddingLayout>
           <ShelterDetailHero shelter={MOCK_SHELTER} />
           <ShelterOpportunities opportunities={MOCK_OPPORTUNITIES} />

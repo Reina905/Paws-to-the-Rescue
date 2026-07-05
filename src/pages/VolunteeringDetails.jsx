@@ -15,8 +15,8 @@ export const VolunteeringDetails = () => {
 
   return (
     <>
-    <Navbar/>
-      <main className="bg-tertiary-light py-24">
+    <Navbar variant="light" />
+      <main className=" py-24">
         <PaddingLayout>
           <VolunteeringDetailCard opportunity={opportunity} />
         </PaddingLayout>

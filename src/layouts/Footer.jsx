@@ -1,6 +1,7 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import { PawPrint } from "lucide-react"
+import PawsToTheRescue from '/src/assets/Logos/PawsToTheRescueLogoWhite.png'
 
 export const Footer = () => {
   return (
@@ -8,8 +9,8 @@ export const Footer = () => {
 
       {/* Decorative background paw */}
       <div className="absolute inset-0 opacity-10 pointer-events-none">
-        <PawPrint className="absolute top-10 left-10" size={120} />
-        <PawPrint className="absolute bottom-10 right-10" size={160} />
+        <PawPrint className="absolute bottom-10 left-10" size={120} />
+        <PawPrint className="absolute top-10 right-10" size={160} />
       </div>
 
       <div className="max-w-6xl mx-auto px-6 relative z-10">
@@ -18,9 +19,9 @@ export const Footer = () => {
 
           {/* Brand */}
           <div>
-            <h2 className="text-2xl font-bold mb-4">
-              Paws to the Rescue
-            </h2>
+            <div className=" mb-4">
+            <img src={PawsToTheRescue} alt="Paws To The Rescue Logo" className="h-15"/>
+            </div>
 
             <p className="text-white/80 leading-7">
               Connecting volunteers with shelters to give every cat the care and love they deserve.
@@ -56,7 +57,7 @@ export const Footer = () => {
             </h3>
 
             <p className="text-white/80">
-              Barcelona, Spain
+              Cat Fur, Catland
             </p>
 
             <p className="text-white/80 mt-2">

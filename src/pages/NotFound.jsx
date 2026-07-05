@@ -8,7 +8,7 @@ export const NotFound = () => {
   const navigate = useNavigate();
 
   return (
-    <main className="min-h-screen bg-tertiary-light flex items-center">
+    <main className="min-h-screen flex items-center">
       <PaddingLayout>
 
         <div className="flex flex-col items-center text-center">
