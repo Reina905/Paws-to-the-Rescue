@@ -1,17 +1,26 @@
-import { Navbar } from './Navbar/Navbar'
+// layouts/MainLayout.jsx
+import { Header } from './Header'
 import { Footer } from './Footer'
 
-/**
- * Standard page layout: Navbar on top, Footer at the bottom.
- * Use this for every page that does NOT have a full-screen hero header.
- * Pages with a hero (Home, AboutUs) should render <Header> themselves
- * before wrapping the rest of the content in <MainLayout>.
- */
-export const MainLayout = ({ children, withNavbar = true }) => {
+export const MainLayout = ({
+  backgroundType,
+  backgroundSrc,
+  overlayClassName,
+  hero,
+  children,
+}) => {
   return (
     <>
-      {withNavbar && <Navbar />}
-      {children}
+      <Header
+        backgroundType={backgroundType}
+        backgroundSrc={backgroundSrc}
+        overlayClassName={overlayClassName}
+      >
+        {hero}
+      </Header>
+
+      <main className="relative overflow-hidden isolate">{children}</main>
+
       <Footer />
     </>
   )

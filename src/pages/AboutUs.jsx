@@ -5,19 +5,19 @@ import { SuccessStories } from "../features/about/SuccessStories"
 import { CommunityGallery } from "../features/about/CommunityGallery"
 import { JoinCommunity } from "../features/home/JoinCommunity"
 import { MainLayout } from "../layouts/MainLayout"
+import AboutUsHeroImage from "../assets/HeroStaticResources/AboutUsHeroBackground.PNG"
 
 export const AboutUs = () => {
   return (
-    // withNavbar=false because AboutHero renders its own Header (which includes Navbar)
-    <MainLayout withNavbar={false}>
-      <main className="overflow-hidden">
-        <AboutHero />
+        <MainLayout
+          backgroundType="image"
+          backgroundSrc={AboutUsHeroImage}
+          hero={<AboutHero />}
+        >
         <AboutSection />
         <ImpactSection />
         <SuccessStories />
         <CommunityGallery />
-        <JoinCommunity />
-      </main>
     </MainLayout>
   )
 }

@@ -1,4 +1,4 @@
-import catImage from "../../assets/VolunteerFeedingCats.PNG"
+import catImage from "../../assets/HeroStaticResources/AboutUsHeroBackground.PNG"
 import { VolunteeringCard } from "../volunteering/VolunteeringCard"
 import { SectionHeader } from "../../components/SectionHeader"
 

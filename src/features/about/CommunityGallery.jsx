@@ -1,14 +1,14 @@
 import React from "react";
 import { PaddingLayout } from "../../layouts/PaddingLayout"
 
-import gallery1 from "../../assets/VolunteerFeedingCats.PNG";
-import gallery2 from "../../assets/VolunteerFeedingCats.PNG";
-import gallery3 from "../../assets/VolunteerFeedingCats.PNG";
-import gallery4 from "../../assets/VolunteerFeedingCats.PNG";
-import gallery5 from "../../assets/VolunteerFeedingCats.PNG";
-import gallery6 from "../../assets/VolunteerFeedingCats.PNG";
-import gallery7 from "../../assets/VolunteerFeedingCats.PNG";
-import gallery8 from "../../assets/VolunteerFeedingCats.PNG";
+import gallery1 from "../../assets/HeroStaticResources/AboutUsHeroBackground.PNG";
+import gallery2 from "../../assets/HeroStaticResources/AboutUsHeroBackground.PNG";
+import gallery3 from "../../assets/HeroStaticResources/AboutUsHeroBackground.PNG";
+import gallery4 from "../../assets/HeroStaticResources/AboutUsHeroBackground.PNG";
+import gallery5 from "../../assets/HeroStaticResources/AboutUsHeroBackground.PNG";
+import gallery6 from "../../assets/HeroStaticResources/AboutUsHeroBackground.PNG";
+import gallery7 from "../../assets/HeroStaticResources/AboutUsHeroBackground.PNG";
+import gallery8 from "../../assets/HeroStaticResources/AboutUsHeroBackground.PNG";
 
 export const CommunityGallery = () => {
   const images = [

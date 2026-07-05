@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@tailwindcss/vite':
-        specifier: ^4.3.1
-        version: 4.3.1(vite@8.1.0(jiti@2.7.0))
       framer-motion:
         specifier: ^12.42.2
         version: 12.42.2(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -20,6 +17,9 @@ importers:
       react:
         specifier: ^19.2.7
         version: 19.2.7
+      react-countup:
+        specifier: ^6.5.3
+        version: 6.5.3(react@19.2.7)
       react-dom:
         specifier: ^19.2.7
         version: 19.2.7(react@19.2.7)
@@ -30,6 +30,9 @@ importers:
       '@eslint/js':
         specifier: ^10.0.1
         version: 10.0.1(eslint@10.6.0(jiti@2.7.0))
+      '@tailwindcss/vite':
+        specifier: ^4.3.1
+        version: 4.3.1(vite@8.1.0(jiti@2.7.0))
       '@types/react':
         specifier: ^19.2.17
         version: 19.2.17
@@ -486,6 +489,9 @@ packages:
     resolution: {integrity: sha512-ei8Aos7ja0weRpFzJnEA9UHJ/7XQmqglbRwnf2ATjcB9Wq874VKH9kfjjirM6UhU2/E5fFYadylyhFldcqSidQ==}
     engines: {node: '>=18'}
 
+  countup.js@2.10.1:
+    resolution: {integrity: sha512-UHW/BsPDgVZfN919D4iu2HPv+jJxZUuaR3EhT0ScFZaD446GiQtkMTgOnOyJXdA2AewdlyUk9UvERlTHTbVpcw==}
+
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
@@ -854,6 +860,11 @@ packages:
   punycode@2.3.1:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
+
+  react-countup@6.5.3:
+    resolution: {integrity: sha512-udnqVQitxC7QWADSPDOxVWULkLvKUWrDapn5i53HE4DPRVgs+Y5rr4bo25qEl8jSh+0l2cToJgGMx+clxPM3+w==}
+    peerDependencies:
+      react: '>= 16.3.0'
 
   react-dom@19.2.7:
     resolution: {integrity: sha512-t0BRVXvbiE/o20Hfw669rLbMCDWtYZLvmJigy2f0MxsXF+71pxhR3xOkspmsO8h3ZlNzyibAmtCa3l4lYKk6gQ==}
@@ -1377,6 +1388,8 @@ snapshots:
 
   cookie@1.1.1: {}
 
+  countup.js@2.10.1: {}
+
   cross-spawn@7.0.6:
     dependencies:
       path-key: 3.1.1
@@ -1691,6 +1704,11 @@ snapshots:
   prelude-ls@1.2.1: {}
 
   punycode@2.3.1: {}
+
+  react-countup@6.5.3(react@19.2.7):
+    dependencies:
+      countup.js: 2.10.1
+      react: 19.2.7
 
   react-dom@19.2.7(react@19.2.7):
     dependencies:

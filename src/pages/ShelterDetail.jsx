@@ -2,6 +2,8 @@ import { MainLayout } from "../layouts/MainLayout"
 import { ShelterDetailHero } from "../features/shelters/ShelterDetailHero"
 import { ShelterOpportunities } from "../features/shelters/ShelterOpportunities"
 import { PaddingLayout } from "../layouts/PaddingLayout"
+import { Navbar } from "../layouts/Navbar/Navbar"
+import { Footer } from "../layouts/Footer"
 
 const MOCK_SHELTER = {
   id: 1,
@@ -42,13 +44,15 @@ const MOCK_OPPORTUNITIES = [
 
 export const ShelterDetail = () => {
   return (
-    <MainLayout>
+    <>
+    <Navbar/>
       <main className="bg-tertiary-light min-h-screen">
         <PaddingLayout>
           <ShelterDetailHero shelter={MOCK_SHELTER} />
           <ShelterOpportunities opportunities={MOCK_OPPORTUNITIES} />
         </PaddingLayout>
       </main>
-    </MainLayout>
+      <Footer/>
+      </>
   )
 }

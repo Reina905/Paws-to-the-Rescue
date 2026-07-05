@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react"
-import { Link, useLocation } from "react-router-dom"
-import OrangeLogo from "/src/assets/PawsToTheRescueLogoOrange.png"
-import WhiteLogo from "/src/assets/PawsToTheRescueLogoWhite.png"
+import { Link } from "react-router-dom"
+import OrangeLogo from "/src/assets/Logos/PawsToTheRescueLogoOrange.png"
+import WhiteLogo from "/src/assets/Logos/PawsToTheRescueLogoWhite.png"
 import { NavLink } from "./NavLink"
+import { SecondaryNavLink } from "./SecondaryNavLink"
 
 const NAV_LINKS = [
   { to: "/", label: "Home" },
@@ -22,11 +23,10 @@ export const Navbar = () => {
 
   return (
     <nav
-      className={`font-semibold flex py-4 w-full items-center px-10 z-9999 ${
-        scrolled
+      className={`font-semibold flex py-4 w-full items-center px-10 z-9999 ${scrolled
           ? "bg-tertiary-light bg-opacity-5 text-primary fixed shadow-sm transition-all ease-in-out"
           : ""
-      }`}
+        }`}
     >
       {/* Logo */}
       <div className="logo mr-auto">
@@ -49,23 +49,28 @@ export const Navbar = () => {
       </div>
 
       {/* Auth buttons */}
-      <div className="button-for-auth ml-auto flex gap-3">
-        <Link
+      <div className="ml-auto flex gap-3">
+        <SecondaryNavLink
           to="/login"
-          className={`link py-2 px-3 rounded-xl text-primary ${
-            scrolled ? "bg-tertiary text-white hover:bg-tertiary" : "bg-white"
-          } hover:bg-secondary-light transition-all duration-300 ease-in-out hover:-translate-y-0.5`}
+          className={
+            scrolled
+              ? "text-white bg-tertiary hover:bg-tertiary"
+              : "text-primary bg-white hover:bg-secondary-light"
+          }
         >
-          Log In
-        </Link>
-        <Link
+         Log In
+        </SecondaryNavLink>
+
+        <SecondaryNavLink
           to="/sign-up"
-          className={`link py-2 px-3 rounded-xl ${
-            scrolled ? "text-white" : ""
-          } bg-primary hover:bg-primary-dark transition-all duration-300 ease-in-out hover:-translate-y-0.5`}
+          className={
+            scrolled
+              ? "text-white bg-primary hover:bg-primary-dark"
+              : "bg-primary hover:bg-primary-dark"
+          }
         >
           Sign Up
-        </Link>
+        </SecondaryNavLink>
       </div>
     </nav>
   )

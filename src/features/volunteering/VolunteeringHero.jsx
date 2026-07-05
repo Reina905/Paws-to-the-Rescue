@@ -1,37 +1,25 @@
-import { ArrowRight } from "lucide-react"
-import heroImage from "../../assets/VolunteerFeedingCats.PNG"
-import { Header } from "../../layouts/Header"
-import { PaddingLayout } from "../../layouts/PaddingLayout"
-
-export const AboutHero = () => {
+import React from "react";
+import WhiteCat from "../../assets/CartoonResources/WhiteCatAndAButterfly.png"
+export const VolunteeringHero = () => {
   return (
-    <Header>
-      {/* Background image */}
-      <img
-        src={heroImage}
-        alt="Volunteers helping rescued cats"
-        className="absolute inset-0 w-full h-full object-cover -z-10"
-      />
-
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/35 -z-10" />
-
-      {/* Hero content */}
-      <PaddingLayout className="flex items-center flex-1">
-        <div className="max-w-3xl text-white">
-          <h1 className="mt-8 text-2xl md:text-6xl font-bold leading-tight">
-            Every Cat Deserves
-            <br />
-            <span className="text-primary-light">A Second Chance.</span>
+    <>
+      <div className="flex flex-col justify-center items-center font-semibold gap-3 mt-auto mb-15 relative">
+        <div className="mx-25 mb-5">
+          <h1 className="text-center text-5xl/15 font-extrabold">
+            Kitties Are Waiting For 
+            <span className="text-secondary"> You</span>
+            {""}
+            <img
+              src={WhiteCat}
+              className="inline-block w-15 h-19 align-baseline"
+              alt="cat"
+            />
           </h1>
-
-          <p className="mt-8 text-lg md:text-xl text-gray-200 leading-8 max-w-2xl">
-            We connect shelters, volunteers and animal lovers to build a
-            stronger community that gives rescued cats the care, safety and
-            opportunities they deserve.
-          </p>
+          <h4 className="text-center text-lg/8 font-bold">
+            What are you waiting for? Your time and effort can change their world!
+          </h4>
         </div>
-      </PaddingLayout>
-    </Header>
+      </div>
+    </>
   )
 }

@@ -2,9 +2,9 @@ import React from "react";
 import { PaddingLayout } from "../../layouts/PaddingLayout";
 import { ArrowRight } from "lucide-react";
 
-import cat1 from "../../assets/VolunteerFeedingCats.PNG";
-import cat2 from "../../assets/VolunteerFeedingCats.PNG";
-import cat3 from "../../assets/VolunteerFeedingCats.PNG";
+import cat1 from "../../assets/HeroStaticResources/AboutUsHeroBackground.PNG";
+import cat2 from "../../assets/HeroStaticResources/AboutUsHeroBackground.PNG";
+import cat3 from "../../assets/HeroStaticResources/AboutUsHeroBackground.PNG";
 
 export const SuccessStories = () => {
   const stories = [

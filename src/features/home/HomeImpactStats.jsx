@@ -1,12 +1,13 @@
 import { PaddingLayout } from "../../layouts/PaddingLayout"
 import { SectionHeader } from "../../components/SectionHeader"
+import { ImageTextCard } from "../../components/ImageTextCard"
 
 export const HomeImpactStats = () => {
   const stats = [
     { value: "500+", label: "Volunteers" },
     { value: "50+", label: "Partner Shelters" },
     { value: "2,000+", label: "Cats Helped" },
-    { value: "150+", label: "Events" },
+    { value: "150+", label: "Volunteer opportunities"}
   ]
 
   return (
@@ -14,7 +15,7 @@ export const HomeImpactStats = () => {
       <PaddingLayout>
         <SectionHeader
           title="Our Impact"
-          subtitle="Every volunteer, shelter, and rescue contributes to building a safer future for cats in our community."
+          subtitle="Every volunteer and shelter contributes to building a better future for cats"
         />
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mt-16">

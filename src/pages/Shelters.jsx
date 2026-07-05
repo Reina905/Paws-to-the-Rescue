@@ -2,6 +2,7 @@ import { SheltersHero } from "../features/shelters/SheltersHero"
 import { SheltersList } from "../features/shelters/SheltersList"
 import { JoinCommunity } from "../features/home/JoinCommunity"
 import { MainLayout } from "../layouts/MainLayout"
+import ShelterHeroBackground from "../assets/HeroStaticResources/HappyPawsShelter.PNG"
 
 const MOCK_SHELTERS = [
   {
@@ -48,12 +49,12 @@ const MOCK_SHELTERS = [
 
 export const Shelters = () => {
   return (
-    <MainLayout>
-      <main>
-        <SheltersHero />
-        <SheltersList shelters={MOCK_SHELTERS} />
-        <JoinCommunity />
-      </main>
+    <MainLayout
+      backgroundType="image"
+      backgroundSrc={ShelterHeroBackground}
+      hero={<SheltersHero />}
+    >
+      <SheltersList shelters={MOCK_SHELTERS} />
     </MainLayout>
   )
 }

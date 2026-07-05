@@ -1,12 +1,7 @@
 import React from "react";
 import { PaddingLayout } from "../../layouts/PaddingLayout";
-import {
-  HeartHandshake,
-  Target,
-  Users,
-} from "lucide-react";
-
-import aboutImage from "../../assets/VolunteerFeedingCats.PNG";
+import { HeartHandshake, Target, Users } from "lucide-react";
+import aboutImage from "../../assets/HeroStaticResources/AboutUsHeroBackground.PNG";
 
 export const AboutSection = () => {
   return (
