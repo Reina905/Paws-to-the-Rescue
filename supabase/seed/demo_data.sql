@@ -133,7 +133,7 @@ VALUES (
     'https://images.pexels.com/photos/20049565/pexels-photo-20049565/free-photo-of-cats-eating-food-in-a-shelter.jpeg',
     'Happy Whiskers Shelter',
     '2026-08-01 08:00:00+00',
-    2,
+    'From 1:00 pm to 4:00 pm',
     5,
     3,
     true
@@ -149,7 +149,7 @@ VALUES (
     'https://www.dailypaws.com/thmb/47fyY3uop4mUkI6-r6tOQbZuP0Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/cleaning-litter-box-1218969227-2000-9e4f580eb48242078562aa3de6d93257.jpg',
     'Happy Whiskers Shelter',
     '2026-08-01 10:00:00+00',
-    2,
+    'From 8:00 am to 11:00 am',
     4,
     0,
     true
@@ -165,7 +165,7 @@ VALUES (
     'https://www.aaha.org/wp-content/uploads/2025/06/playing-with-cat.jpg',
     'Happy Whiskers Shelter',
     '2026-08-02 14:00:00+00',
-    3,
+    'From 7:00 am to 10:00 am',
     6,
     6,
     true
@@ -181,7 +181,7 @@ VALUES (
     'https://static.independent.co.uk/s3fs-public/thumbnails/image/2019/09/24/15/cat-pet-owner.jpg',
     'City Park',
     '2026-08-10 09:00:00+00',
-    6,
+    'From 3:00 pm to 5:00 pm',
     8,
     8,
     true

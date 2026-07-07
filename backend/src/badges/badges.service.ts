@@ -10,6 +10,7 @@ interface BadgeContext {
   totalActivities: number;
   cleaningActivities: number;
   socializationActivities: number;
+  socializationHours: number;
 }
 
 @Injectable()
@@ -27,6 +28,14 @@ export class BadgesService {
       badgeName: 'Clean Paws',
       check: (ctx) => ctx.cleaningActivities >= 10,
     },
+    {
+      badgeName: 'Cat Whisperer',
+      check: (ctx) => ctx.socializationHours >= 20,
+    },
+    {
+      badgeName: 'Shelter Hero',
+      check: (ctx) => ctx.totalActivities >= 50,
+    },
   ];
 
   constructor(private readonly supabase: SupabaseService) {}
@@ -40,7 +49,7 @@ export class BadgesService {
     // 1. Get activity logs for this volunteer
     const { data: logs, error: logsError } = await client
       .from('activity_logs')
-      .select('title, shelter_id')
+      .select('title, shelter_id, hours')
       .eq('volunteer_id', volunteerId);
 
     if (logsError) {
@@ -57,14 +66,22 @@ export class BadgesService {
       /clean|litter/i.test(log.title || ''),
     ).length;
 
-    const socializationActivities = (logs || []).filter((log) =>
+    const socializationLogs = (logs || []).filter((log) =>
       /social|kitten|caregiv/i.test(log.title || ''),
-    ).length;
+    );
+
+    const socializationActivities = socializationLogs.length;
+
+    const socializationHours = socializationLogs.reduce(
+      (sum, log) => sum + (Number(log.hours) || 0),
+      0,
+    );
 
     const context: BadgeContext = {
       totalActivities,
       cleaningActivities,
       socializationActivities,
+      socializationHours,
     };
 
     // 3. Get all available badges

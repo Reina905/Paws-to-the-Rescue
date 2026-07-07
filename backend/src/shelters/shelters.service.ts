@@ -193,11 +193,11 @@ export class SheltersService {
       throw new NotFoundException('Shelter not found');
     }
 
-    // Count active opportunities for this shelter
-    const { count: activeOpportunities, error: oppError } = await this.supabase
+    // Count active opportunities for this shelter (open = active + future date + has spaces)
+    const { data: activeOpps, error: oppError } = await this.supabase
       .getClient()
       .from('opportunities')
-      .select('*', { count: 'exact', head: true })
+      .select('id, date, available_spaces')
       .eq('shelter_id', shelter.id)
       .eq('is_active', true);
 
@@ -205,6 +205,15 @@ export class SheltersService {
       console.error('Supabase error:', oppError.message);
       throw new InternalServerErrorException('Internal server error');
     }
+
+    // Filter: only count opportunities with future/today date and available spaces > 0
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const activeOpportunities = (activeOpps || []).filter((opp) => {
+      const oppDate = new Date(opp.date);
+      oppDate.setHours(0, 0, 0, 0);
+      return oppDate >= today && opp.available_spaces > 0;
+    }).length;
 
     // Get opportunity IDs for this shelter
     const { data: opportunities, error: oppIdsError } = await this.supabase
@@ -246,8 +255,54 @@ export class SheltersService {
       location: shelter.location,
       totalAnimals: shelter.total_animals || 0,
       volunteers,
-      activeOpportunities: activeOpportunities || 0,
+      activeOpportunities,
     };
+  }
+
+  async getMyOpportunities(userId: string) {
+    // Get shelter by user_id
+    const { data: shelter, error: shelterError } = await this.supabase
+      .getClient()
+      .from('shelters')
+      .select('id')
+      .eq('user_id', userId)
+      .maybeSingle();
+
+    if (shelterError) {
+      console.error('Supabase error:', shelterError.message);
+      throw new InternalServerErrorException('Internal server error');
+    }
+
+    if (!shelter) {
+      throw new NotFoundException('Shelter not found');
+    }
+
+    // Get all opportunities for this shelter (including inactive for management)
+    const { data: opportunities, error: oppError } = await this.supabase
+      .getClient()
+      .from('opportunities')
+      .select('*')
+      .eq('shelter_id', shelter.id)
+      .order('created_at', { ascending: false });
+
+    if (oppError) {
+      console.error('Supabase error:', oppError.message);
+      throw new InternalServerErrorException('Internal server error');
+    }
+
+    return (opportunities || []).map((opp) => ({
+      id: opp.id,
+      name: opp.name,
+      category: opp.category,
+      location: opp.location,
+      date: opp.date,
+      duration: opp.duration,
+      image: opp.image,
+      availableSpaces: opp.available_spaces,
+      totalSpaces: opp.total_spaces,
+      isActive: opp.is_active,
+      createdAt: opp.created_at,
+    }));
   }
 
   async getRecentApplications(userId: string) {

@@ -13,7 +13,7 @@ export const LoginBranding = () => {
         and making a real impact in the lives of rescued cats.
       </p>
 
-      <div className="mt-10 text-6xl">🐾</div>
+      <div className="mt-10 text-6xl"></div>
     </div>
   )
 }

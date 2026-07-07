@@ -135,7 +135,7 @@ export class OpportunitiesService {
 
     // Verify ownership
     const opportunity = await this.findOpportunityById(id);
-    if (opportunity.shelter_id !== shelter.id) {
+    if (String(opportunity.shelter_id) !== String(shelter.id)) {
       throw new ForbiddenException();
     }
 
@@ -146,19 +146,23 @@ export class OpportunitiesService {
     if (dto.location !== undefined) updateData.location = dto.location;
     if (dto.date !== undefined) updateData.date = dto.date;
     if (dto.duration !== undefined) updateData.duration = dto.duration;
-    if (dto.totalSpaces !== undefined) updateData.total_spaces = dto.totalSpaces;
+    if (dto.totalSpaces !== undefined) {
+      updateData.total_spaces = dto.totalSpaces;
+      updateData.available_spaces = dto.totalSpaces;
+    }
     if (dto.image !== undefined) updateData.image = dto.image;
+    if (dto.isActive !== undefined) updateData.is_active = dto.isActive;
 
     const { data, error } = await this.supabase
       .getClient()
       .from('opportunities')
       .update(updateData)
-      .eq('id', id)
+      .eq('id', Number(id))
       .select()
       .single();
 
     if (error) {
-      console.error('Supabase error:', error.message);
+      console.error('Supabase update error:', error.message, error.code, error.details);
       throw new InternalServerErrorException('Internal server error');
     }
 
@@ -166,32 +170,38 @@ export class OpportunitiesService {
   }
 
   async softDelete(id: string, userId: string) {
+    console.log('softDelete called with id:', id, 'userId:', userId);
+    
     // Find shelter by user_id
     const shelter = await this.findShelterByUserId(userId);
+    console.log('Found shelter:', shelter.id);
 
     // Verify opportunity exists
     const opportunity = await this.findOpportunityById(id);
+    console.log('Found opportunity:', opportunity.id, 'shelter_id:', opportunity.shelter_id);
 
     // Verify ownership
-    if (opportunity.shelter_id !== shelter.id) {
+    if (String(opportunity.shelter_id) !== String(shelter.id)) {
+      console.log('Ownership mismatch:', opportunity.shelter_id, '!==', shelter.id);
       throw new ForbiddenException();
     }
 
-    // Soft delete: set is_active = false
-    const { data, error } = await this.supabase
+    // Hard delete the opportunity
+    console.log('Attempting delete for opportunity id:', Number(id));
+    const { error, count } = await this.supabase
       .getClient()
       .from('opportunities')
-      .update({ is_active: false })
-      .eq('id', id)
-      .select()
-      .single();
+      .delete()
+      .eq('id', Number(id));
+
+    console.log('Delete result - error:', error, 'count:', count);
 
     if (error) {
-      console.error('Supabase error:', error.message);
+      console.error('Supabase delete error:', JSON.stringify(error));
       throw new InternalServerErrorException('Internal server error');
     }
 
-    return data;
+    return { id: Number(id), deleted: true };
   }
 
   async apply(opportunityId: string, userId: string) {
@@ -261,6 +271,86 @@ export class OpportunitiesService {
     };
   }
 
+  async withdraw(opportunityId: string, userId: string) {
+    // Find volunteer by user_id
+    const volunteer = await this.findVolunteerByUserId(userId);
+
+    // Check if volunteer has a registration for this opportunity
+    const { data: existingApp, error: checkError } = await this.supabase
+      .getClient()
+      .from('applications')
+      .select('id')
+      .eq('volunteer_id', volunteer.id)
+      .eq('opportunity_id', Number(opportunityId))
+      .maybeSingle();
+
+    if (checkError) {
+      console.error('Supabase error:', checkError.message);
+      throw new InternalServerErrorException('Internal server error');
+    }
+
+    if (!existingApp) {
+      throw new NotFoundException('Registration not found');
+    }
+
+    // Delete the registration
+    const { error: deleteError } = await this.supabase
+      .getClient()
+      .from('applications')
+      .delete()
+      .eq('id', existingApp.id);
+
+    if (deleteError) {
+      console.error('Supabase error:', deleteError.message);
+      throw new InternalServerErrorException('Internal server error');
+    }
+
+    // Increment available spaces
+    const opportunity = await this.findOpportunityById(opportunityId);
+    const { error: updateError } = await this.supabase
+      .getClient()
+      .from('opportunities')
+      .update({ available_spaces: opportunity.available_spaces + 1 })
+      .eq('id', Number(opportunityId));
+
+    if (updateError) {
+      console.error('Supabase error:', updateError.message);
+      // Non-critical — registration was already removed
+    }
+
+    return { withdrawn: true };
+  }
+
+  async getApplicants(opportunityId: string, userId: string) {
+    // Verify the shelter owns this opportunity
+    const shelter = await this.findShelterByUserId(userId);
+    const opportunity = await this.findOpportunityById(opportunityId);
+
+    if (String(opportunity.shelter_id) !== String(shelter.id)) {
+      throw new ForbiddenException();
+    }
+
+    // Get all registered volunteers for this opportunity
+    const { data: applications, error } = await this.supabase
+      .getClient()
+      .from('applications')
+      .select('id, created_at, volunteers(id, name, avatar_url)')
+      .eq('opportunity_id', opportunityId)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Supabase error:', error.message);
+      throw new InternalServerErrorException('Internal server error');
+    }
+
+    return (applications || []).map((app: any) => ({
+      id: app.id,
+      name: app.volunteers?.name || 'Unknown',
+      avatarUrl: app.volunteers?.avatar_url || null,
+      registeredAt: app.created_at,
+    }));
+  }
+
   // --- Private helper methods ---
 
   private async findShelterByUserId(userId: string) {
@@ -306,14 +396,14 @@ export class OpportunitiesService {
       .getClient()
       .from('opportunities')
       .select('*')
-      .eq('id', id)
+      .eq('id', Number(id))
       .single();
 
     if (error) {
       if (error.code === 'PGRST116') {
         throw new NotFoundException('Opportunity not found');
       }
-      console.error('Supabase error:', error.message);
+      console.error('Supabase findOpportunityById error:', error.message, error.code);
       throw new InternalServerErrorException('Internal server error');
     }
 

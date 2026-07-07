@@ -98,7 +98,7 @@ export const ApplyButton = ({ opportunityId, availableSpaces, onApplySuccess }) 
   };
 
   const getButtonText = () => {
-    if (registered) return 'Registered ✓';
+    if (registered) return 'Registered';
     if (isLoading) return 'Registering...';
     return 'Register Now';
   };

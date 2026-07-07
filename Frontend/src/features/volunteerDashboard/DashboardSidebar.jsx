@@ -1,10 +1,11 @@
 import { Link, useNavigate } from "react-router-dom"
-import { LayoutDashboard, History, Home, LogOut } from "lucide-react"
+import { LayoutDashboard, History, Award, Home, LogOut } from "lucide-react"
 import { useAuthStore } from "../../store/authStore"
 
 const NAV_ITEMS = [
   { icon: <LayoutDashboard size={18} />, label: "Dashboard", to: "/volunteer-dashboard" },
   { icon: <History size={18} />, label: "Participation History", to: "/volunteer-history" },
+  { icon: <Award size={18} />, label: "My Badges", to: "/volunteer-badges" },
   { icon: <Home size={18} />, label: "Back to Home", to: "/" },
 ]
 
@@ -21,7 +22,7 @@ export const DashboardSidebar = ({ userName }) => {
     <aside className="hidden md:flex w-64 flex-col bg-secondary-light border-r border-primary-light fixed h-full z-30">
       {/* Logo / Title */}
       <div className="p-6 border-b border-primary-light">
-        <h1 className="text-xl font-bold text-primary">🐾 Volunteer Hub</h1>
+        <h1 className="text-xl font-bold text-primary">Volunteer Hub</h1>
         {userName && (
           <p className="text-sm text-secondary-dark mt-1 truncate">{userName}</p>
         )}

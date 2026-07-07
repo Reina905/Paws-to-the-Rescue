@@ -1,6 +1,6 @@
-# Paws to the Rescue 🐾
+# Paws to the Rescue
 
-A volunteer management platform for cat shelters. Volunteers can discover opportunities, apply for shifts, track hours, and earn badges. Shelters can post opportunities and manage applications.
+A volunteer management platform for cat shelters. Volunteers can discover opportunities, register for shifts, track hours, and earn badges. Shelters can post opportunities and see who registered for each one.
 
 ## Tech Stack
 
@@ -105,6 +105,8 @@ This executes all migration files in order and creates:
 - Row Level Security (RLS) policies
 - Initial badge seed data
 
+> Note: The `applications` table stores volunteer registrations. Volunteers register directly for opportunities (auto-approved) — shelters do not need to manually approve registrations.
+
 ### 2.5 Create Authentication Users
 
 The demo data requires 3 users to exist in Supabase Auth **before** running the seed script.
@@ -150,7 +152,7 @@ This populates the database with:
 - A shelter profile with details
 - 2 volunteer profiles
 - 4 volunteer opportunities
-- Applications with various statuses
+- Volunteer registrations (auto-approved)
 - Activity logs with tracked hours
 - Earned badges
 
@@ -322,7 +324,7 @@ pnpm dev
 
 ```
 ┌─────────────┐       ┌──────────────┐       ┌──────────────┐
-│   Frontend  │──────▶│   Backend    │──────▶│   Supabase   │
+│   Frontend  │──────│   Backend    │──────│   Supabase   │
 │  React/Vite │ HTTP  │   NestJS     │  SDK  │  PostgreSQL  │
 │  :5173      │       │   :3000      │       │  + Auth      │
 └─────────────┘       └──────────────┘       └──────────────┘
@@ -331,9 +333,13 @@ pnpm dev
 **Authentication Flow:**
 
 1. User signs up / signs in via the frontend → Supabase Auth issues a JWT.
-2. Frontend stores the session and attaches the token as `Authorization: Bearer <token>` on every API request (via axios interceptor).
+2. Frontend stores the session and attaches the token as `Authorization: Bearer <token>` on every API request (via Axios interceptor).
 3. Backend validates the JWT using Passport with the `SUPABASE_JWT_SECRET`.
 4. Role-based guards (`volunteer` / `shelter`) protect endpoints based on JWT claims.
+
+**Volunteer Registration Flow:**
+
+Volunteers can register directly for any opportunity with available spaces — no shelter approval is required. Registration is immediate and spaces are decremented automatically.
 
 ---
 

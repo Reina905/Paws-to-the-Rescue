@@ -54,14 +54,19 @@ export class VolunteersService {
       throw new ConflictException('Volunteer profile already exists');
     }
 
+    // Build full name from name + lastName if provided
+    const fullName = dto.lastName
+      ? `${dto.name} ${dto.lastName}`
+      : dto.name;
+
     const { data, error } = await this.supabase
       .getClient()
       .from('volunteers')
       .insert({
         user_id: userId,
-        name: dto.name,
-        role: dto.role,
-        bio: dto.bio ?? null,
+        name: fullName,
+        role: dto.role || dto.skills || 'volunteer',
+        bio: dto.bio || dto.description || null,
         avatar_url: dto.avatarUrl ?? null,
       })
       .select()
@@ -357,7 +362,7 @@ export class VolunteersService {
       .getClient()
       .from('applications')
       .select(
-        'id, hours, created_at, opportunities(name, date, shelters(name, location))',
+        'id, opportunity_id, hours, created_at, opportunities(name, date, shelters(name, location))',
       )
       .eq('volunteer_id', volunteer.id)
       .order('created_at', { ascending: false });
@@ -373,6 +378,7 @@ export class VolunteersService {
 
     return registrations.map((reg: any) => ({
       id: reg.id,
+      opportunityId: reg.opportunity_id,
       title: reg.opportunities?.name || '',
       shelter: reg.opportunities?.shelters?.name || '',
       location: reg.opportunities?.shelters?.location || '',

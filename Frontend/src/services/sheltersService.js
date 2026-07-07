@@ -11,3 +11,6 @@ export const getShelterDashboard = () =>
 
 export const getShelterRecentRegistrations = () =>
   api.get('/shelters/me/applications/recent').then(res => res.data);
+
+export const getShelterMyOpportunities = () =>
+  api.get('/shelters/me/opportunities').then(res => res.data);

@@ -43,7 +43,7 @@ CREATE TABLE opportunities (
     image TEXT,
     location TEXT,
     date TIMESTAMPTZ NOT NULL,
-    duration INTEGER,
+    duration TEXT,
     total_spaces INTEGER NOT NULL,
     available_spaces INTEGER NOT NULL,
     is_active BOOLEAN NOT NULL DEFAULT true,

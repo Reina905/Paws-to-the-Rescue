@@ -57,11 +57,13 @@ export class OpportunitiesController {
     return this.opportunitiesService.update(id, req.user.id, updateOpportunityDto);
   }
 
-  // Protected: soft-delete opportunity (shelter role)
+  // Protected: delete opportunity (shelter role)
   @Delete(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('shelter')
+  @HttpCode(HttpStatus.OK)
   remove(@Req() req: any, @Param('id') id: string) {
+    console.log('DELETE /opportunities/' + id + ' called by user ' + req.user.id);
     return this.opportunitiesService.softDelete(id, req.user.id);
   }
 
@@ -72,5 +74,21 @@ export class OpportunitiesController {
   @HttpCode(HttpStatus.CREATED)
   apply(@Req() req: any, @Param('id') id: string) {
     return this.opportunitiesService.apply(id, req.user.id);
+  }
+
+  // Protected: withdraw from opportunity (volunteer role)
+  @Delete(':id/apply')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('volunteer')
+  withdraw(@Req() req: any, @Param('id') id: string) {
+    return this.opportunitiesService.withdraw(id, req.user.id);
+  }
+
+  // Protected: get enrolled volunteers for an opportunity (shelter role)
+  @Get(':id/applicants')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('shelter')
+  getApplicants(@Req() req: any, @Param('id') id: string) {
+    return this.opportunitiesService.getApplicants(id, req.user.id);
   }
 }

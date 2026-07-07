@@ -42,6 +42,13 @@ export class SheltersController {
     return this.sheltersService.getRecentApplications(req.user.id);
   }
 
+  @Get('me/opportunities')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('shelter')
+  getMyOpportunities(@Request() req) {
+    return this.sheltersService.getMyOpportunities(req.user.id);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.sheltersService.findOne(id);

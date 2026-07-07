@@ -12,9 +12,9 @@ import { AboutUs } from "./pages/AboutUs"
 import { ShelterDetail } from "./pages/ShelterDetail"
 import { VolunteerDashboard } from "./pages/VolunteerDashboard"
 import { ShelterDashboard } from "./pages/ShelterDashboard"
-import { CreateOpportunity } from "./pages/CreateOpportunity"
-import { ShelterOpportunityManagement } from "./pages/ShelterOpportunityManagement"
+import { ManageVolunteering } from "./pages/ManageVolunteering"
 import { VolunteerParticipationHistory } from "./pages/VolunteerParticipationHistory"
+import { VolunteerBadges } from "./pages/VolunteerBadges"
 import { NotFound } from "./pages/NotFound"
 
 export default function App() {
@@ -40,13 +40,13 @@ export default function App() {
           <Route element={<ProtectedRoute allowedRoles={["volunteer"]} />}>
             <Route path="/volunteer-dashboard" element={<VolunteerDashboard />} />
             <Route path="/volunteer-history" element={<VolunteerParticipationHistory />} />
+            <Route path="/volunteer-badges" element={<VolunteerBadges />} />
           </Route>
 
           {/* Protected shelter routes */}
           <Route element={<ProtectedRoute allowedRoles={["shelter"]} />}>
             <Route path="/shelter-dashboard" element={<ShelterDashboard />} />
-            <Route path="/create-opportunity" element={<CreateOpportunity />} />
-            <Route path="/shelter-opportunities" element={<ShelterOpportunityManagement />} />
+            <Route path="/manage-volunteering" element={<ManageVolunteering />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />

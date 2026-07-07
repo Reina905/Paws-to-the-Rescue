@@ -52,9 +52,12 @@ export const ShelterDetail = () => {
   }
 
   return (
-    <MainLayout backgroundType="image" backgroundSrc={ShelterHeroBackground} hero={<div />}>
-      <ShelterDetailHero shelter={shelter} />
+    <> 
+    <Navbar variant="light"/>
+    <main className="py-10"> 
       <ShelterOpportunities opportunities={shelter.opportunities || []} shelter={shelter} />
-    </MainLayout>
+    </main>
+    <Footer />
+    </>
   )
 }

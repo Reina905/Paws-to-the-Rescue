@@ -5,9 +5,9 @@ import { EmptyState } from '../../components/EmptyState';
 const BadgeCard = ({ badge }) => (
   <div className="flex flex-col items-center gap-2 bg-white p-4 rounded-2xl shadow-sm text-center min-w-[120px]">
     <img
-      src={badge.imageUrl || badge.urlImage}
+      src={badge.url_image || badge.urlImage}
       alt={badge.name}
-      className="w-14 h-14 rounded-full object-cover"
+      className="w-14 h-14 rounded-full object-contain"
     />
     <p className="text-sm font-medium text-gray-700 line-clamp-2">{badge.name}</p>
   </div>

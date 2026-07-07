@@ -1,4 +1,5 @@
 import { MapPin, Calendar, Clock, Tag } from "lucide-react"
+import { formatDate } from "../../utils/formatDate"
 
 export const ParticipationHistoryCard = ({
   opportunityName,
@@ -18,7 +19,7 @@ export const ParticipationHistoryCard = ({
       </span>
       <span className="flex items-center gap-1">
         <Calendar size={12} />
-        {date}
+        {formatDate(date)}
       </span>
       <span className="flex items-center gap-1">
         <Clock size={12} />

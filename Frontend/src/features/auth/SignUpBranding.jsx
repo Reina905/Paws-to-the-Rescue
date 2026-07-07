@@ -12,7 +12,7 @@ export const SignUpBranding = () => {
         and making a real difference for rescued cats.
       </p>
 
-      <div className="mt-10 text-6xl">❤️ 🐱</div>
+      <div className="mt-10 text-6xl"></div>
     </div>
   )
 }

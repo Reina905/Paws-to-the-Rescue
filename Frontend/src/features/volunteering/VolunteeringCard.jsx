@@ -2,6 +2,7 @@ import { Link } from "react-router-dom"
 import LocationIcon from "../../assets/CartoonResources/LocationIcon.png"
 import DateIcon from "../../assets/CartoonResources/DateIcon.png"
 import DurationIcon from "../../assets/CartoonResources/DurationIcon.png"
+import { formatDate } from "../../utils/formatDate"
 
 export const VolunteeringCard = ({ id, shelterName, name, image, category, totalSpaces, availableSpaces, date, duration, location }) => {
   const takenSpaces = totalSpaces - availableSpaces
@@ -41,7 +42,7 @@ export const VolunteeringCard = ({ id, shelterName, name, image, category, total
           <ul className="space-y-1.5 text-sm text-secondary-dark">
             <li className="flex items-center gap-2">
               <img src={DateIcon} alt="" aria-hidden="true" className="h-4 shrink-0" />
-              {date}
+              {formatDate(date)}
             </li>
             <li className="flex items-center gap-2">
               <img src={DurationIcon} alt="" aria-hidden="true" className="h-4 shrink-0" />

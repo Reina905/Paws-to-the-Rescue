@@ -105,11 +105,13 @@ This document describes the technical design of the NestJS backend for **Paws to
 | id              | uuid      | PK, default gen_random_uuid()     |
 | volunteer_id    | uuid      | FK → volunteers.id, NOT NULL      |
 | opportunity_id  | uuid      | FK → opportunities.id, NOT NULL   |
-| status          | text      | NOT NULL, default 'pending'       |
+| status          | text      | NOT NULL, default 'approved'      |
 | hours           | integer   | nullable                          |
 | note            | text      | nullable                          |
 | created_at      | timestamptz | default now()                   |
-| UNIQUE          |           | (volunteer_id, opportunity_id) WHERE status IN ('pending','approved') |
+| UNIQUE          |           | (volunteer_id, opportunity_id)    |
+
+> Note: Volunteers register directly and are auto-approved. The `status` column defaults to `'approved'` since no shelter approval step is required.
 
 ### Table: `activity_logs`
 | Column          | Type      | Constraints                       |
@@ -205,7 +207,7 @@ export class RolesGuard implements CanActivate {
 | GET    | /volunteers/me/dashboard | JWT | volunteer | Dashboard data |
 | GET    | /volunteers/me/activity | JWT | volunteer | Activity history |
 | GET    | /volunteers/me/recommendations | JWT | volunteer | Recommendations |
-| GET    | /volunteers/me/applications | JWT | volunteer | My applications |
+| GET    | /volunteers/me/applications | JWT | volunteer | My registrations |
 | GET    | /volunteers/:id | - | - | Public profile |
 
 **Service Methods:**
@@ -216,7 +218,7 @@ export class RolesGuard implements CanActivate {
 - `getDashboard(userId)` → volunteer profile + aggregate totalHours from activity_logs + count distinct shelter_id
 - `getActivity(userId)` → select from activity_logs join opportunities, format time as relative
 - `getRecommendations(userId)` → select active opportunities NOT already applied by user, limit 5
-- `getApplications(userId, statusFilter?)` → select from applications join opportunities join shelters
+- `getApplications(userId, statusFilter?)` → select from applications join opportunities join shelters (all registrations are auto-approved)
 
 **Requirement Coverage:** R5, R7, R8, R11
 
@@ -236,7 +238,7 @@ export class RolesGuard implements CanActivate {
 | POST   | /shelters | JWT | any | Create shelter profile |
 | GET    | /shelters | - | - | List shelters |
 | GET    | /shelters/me/dashboard | JWT | shelter | Dashboard data |
-| GET    | /shelters/me/applications/recent | JWT | shelter | Recent applications |
+| GET    | /shelters/me/applications/recent | JWT | shelter | Recent volunteer registrations |
 | GET    | /shelters/:id | - | - | Shelter detail + opportunities |
 
 **Service Methods:**
@@ -245,7 +247,7 @@ export class RolesGuard implements CanActivate {
 - `findOne(id)` → select shelter + select active opportunities for that shelter
 - `findByUserId(userId)` → select from shelters where user_id
 - `getDashboard(userId)` → shelter stats aggregate
-- `getRecentApplications(userId)` → recent 10 applications for shelter's opportunities
+- `getRecentApplications(userId)` → recent 10 volunteer registrations for shelter's opportunities
 
 **Requirement Coverage:** R4, R6, R11
 
@@ -269,7 +271,7 @@ export class RolesGuard implements CanActivate {
 | POST   | /opportunities | JWT | shelter | Create opportunity |
 | PATCH  | /opportunities/:id | JWT | shelter | Update opportunity |
 | DELETE | /opportunities/:id | JWT | shelter | Soft-delete (isActive=false) |
-| POST   | /opportunities/:id/apply | JWT | volunteer | Apply to opportunity |
+| POST   | /opportunities/:id/apply | JWT | volunteer | Register for opportunity (auto-approved) |
 
 **Service Methods:**
 - `findAll(filters)` → select from opportunities where is_active=true, join shelters for shelterName, apply filters
@@ -277,13 +279,13 @@ export class RolesGuard implements CanActivate {
 - `create(shelterId, dto)` → insert opportunity, set availableSpaces = totalSpaces, isActive = true
 - `update(id, shelterId, dto)` → check ownership, partial update
 - `softDelete(id, shelterId)` → check ownership, set is_active = false
-- `apply(opportunityId, volunteerId)` → check exists, check duplicate, insert application
+- `apply(opportunityId, volunteerId)` → check exists, check duplicate, check available spaces, insert registration with status `approved`, decrement availableSpaces
 
 **Requirement Coverage:** R3, R7, R9
 
 ---
 
-### 6. Applications Module (NEW)
+### 6. Applications Module (Legacy)
 
 **Files:**
 - `src/applications/applications.controller.ts`
@@ -295,12 +297,11 @@ export class RolesGuard implements CanActivate {
 
 | Method | Path | Auth | Role | Description |
 |--------|------|------|------|-------------|
-| PATCH  | /applications/:id/status | JWT | shelter | Approve/reject application |
+| PATCH  | /applications/:id/status | JWT | shelter | Update registration status (legacy endpoint, not actively used) |
 
-**Service Methods:**
-- `updateStatus(applicationId, shelterId, newStatus)` → verify ownership, update status, adjust availableSpaces
+**Note:** In the current implementation, volunteers register directly for opportunities and are auto-approved. Shelters can view registrations but do not need to approve or reject them. This module exists as a legacy endpoint but the primary flow is handled by `POST /opportunities/:id/apply` in the Opportunities module.
 
-**Requirement Coverage:** R10
+**Requirement Coverage:** R10 (shelter visibility of registrations)
 
 ---
 
@@ -406,13 +407,15 @@ export class ExampleService {
 
 2. **Soft-delete for opportunities**: `DELETE /opportunities/:id` sets `is_active = false` instead of deleting the row, preserving referential integrity with applications.
 
-3. **Applications as a separate module**: Although applications are linked to opportunities and volunteers, they have their own endpoint for shelter management, justifying an independent module.
+3. **Direct registration (no approval flow)**: Volunteers register directly for opportunities and are immediately confirmed (status = `approved`). Shelters can view who registered but do not approve or reject registrations. This reduces friction and encourages volunteer participation.
 
-4. **Centralized RolesGuard**: A single reusable guard with the `@Roles()` decorator avoids duplicated authorization logic in each controller.
+4. **Applications module kept as legacy**: The `PATCH /applications/:id/status` endpoint still exists for edge cases but is not part of the primary user flow. The main registration logic lives in `POST /opportunities/:id/apply`.
 
-5. **Relative time calculated on backend**: The `time` fields ("2 days ago") are calculated server-side for consistency, using timestamp differences with `Date.now()`.
+5. **Centralized RolesGuard**: A single reusable guard with the `@Roles()` decorator avoids duplicated authorization logic in each controller.
 
-6. **class-validator + class-transformer**: Declarative validation in DTOs, activated globally by `ValidationPipe`.
+6. **Relative time calculated on backend**: The `time` fields ("2 days ago") are calculated server-side for consistency, using timestamp differences with `Date.now()`.
+
+7. **class-validator + class-transformer**: Declarative validation in DTOs, activated globally by `ValidationPipe`.
 
 ---
 

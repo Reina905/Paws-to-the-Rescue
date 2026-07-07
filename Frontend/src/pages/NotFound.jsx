@@ -32,12 +32,11 @@ export const NotFound = () => {
 
             <p className="text-gray-500 mt-4 leading-7">
               It looks like the page you’re looking for doesn’t exist or has been moved.
-              Don’t worry — even lost cats find their way home 🐱
+              Don’t worry — even lost cats find their way home 
             </p>
 
             {/* ILLUSTRATION */}
             <div className="text-6xl mt-8">
-              🐾 🐱 🐾
             </div>
 
             {/* BUTTONS */}

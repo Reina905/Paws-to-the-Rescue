@@ -7,7 +7,7 @@ import { useVolunteerDashboard, useVolunteerRegistrations, useVolunteerBadges } 
 
 export const VolunteerDashboard = () => {
   const { data: volunteer, loading: loadingProfile, error: profileError } = useVolunteerDashboard()
-  const { data: registrations, loading: loadingRegs, error: regsError } = useVolunteerRegistrations()
+  const { data: registrations, loading: loadingRegs, error: regsError, refetch: refetchRegs } = useVolunteerRegistrations()
   const { data: badges, loading: loadingBadges, error: badgesError } = useVolunteerBadges()
 
   const volunteerName = volunteer?.name || "Volunteer"
@@ -56,6 +56,7 @@ export const VolunteerDashboard = () => {
               registrations={registrations || []}
               isLoading={loadingRegs}
               error={regsError}
+              onWithdraw={() => refetchRegs()}
             />
           </section>
 

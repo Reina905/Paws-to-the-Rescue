@@ -1,11 +1,10 @@
 import { Link, useNavigate } from "react-router-dom"
-import { LayoutDashboard, Calendar, Briefcase, Home, LogOut } from "lucide-react"
+import { LayoutDashboard, Briefcase, Home, LogOut } from "lucide-react"
 import { useAuthStore } from "../../store/authStore"
 
 const NAV_ITEMS = [
   { icon: <LayoutDashboard size={18} />, label: "Dashboard", to: "/shelter-dashboard" },
-  { icon: <Briefcase size={18} />, label: "Manage Opportunities", to: "/shelter-opportunities" },
-  { icon: <Calendar size={18} />, label: "Volunteering Opportunities", to: "/create-opportunity" },
+  { icon: <Briefcase size={18} />, label: "Manage Volunteering", to: "/manage-volunteering" },
   { icon: <Home size={18} />, label: "Back to Home", to: "/" },
 ]
 
@@ -22,7 +21,7 @@ export const ShelterDashboardSidebar = ({ shelterName }) => {
     <aside className="hidden md:flex w-64 flex-col bg-secondary-light border-r border-primary-light fixed h-full z-30">
       {/* Logo / Title */}
       <div className="p-6 border-b border-primary-light">
-        <h1 className="text-xl font-bold text-primary">🐾 Shelter Panel</h1>
+        <h1 className="text-xl font-bold text-primary">Shelter Panel</h1>
         {shelterName && (
           <p className="text-sm text-secondary-dark mt-1 truncate">{shelterName}</p>
         )}

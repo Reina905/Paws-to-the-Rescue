@@ -11,11 +11,15 @@ import { SupabaseService } from './supabase.service';
         // Use service role key to bypass RLS — backend handles its own auth via JWT guards
         const serviceRoleKey = config.get('SUPABASE_SERVICE_ROLE_KEY');
         const anonKey = config.get('SUPABASE_ANON_KEY');
+        const url = config.get('SUPABASE_URL');
+        const key = serviceRoleKey || anonKey;
 
-        return require('@supabase/supabase-js').createClient(
-          config.get('SUPABASE_URL'),
-          serviceRoleKey || anonKey,
-        );
+        return require('@supabase/supabase-js').createClient(url, key, {
+          auth: {
+            autoRefreshToken: false,
+            persistSession: false,
+          },
+        });
       },
     },
     SupabaseService,

@@ -21,9 +21,9 @@ import { FormField } from '../../components/FormField';
 import { FormError } from '../../components/FormError';
 
 /**
- * Validation schemas per role.
+ * Shared field validators (email/password) — validated separately via validateSharedFields.
  */
-const volunteerSchema = {
+const sharedSchema = {
   email: [
     (v) => validateRequired(v, 'Email'),
     (v) => validateEmail(v),
@@ -32,6 +32,9 @@ const volunteerSchema = {
     (v) => validateRequired(v, 'Password'),
     (v) => validateMinLength(v, 6, 'Password'),
   ],
+};
+
+const volunteerSchema = {
   name: [
     (v) => validateRequired(v, 'First Name'),
     (v) => validateMaxLength(v, 100, 'First Name'),
@@ -46,14 +49,6 @@ const volunteerSchema = {
 };
 
 const shelterSchema = {
-  email: [
-    (v) => validateRequired(v, 'Email'),
-    (v) => validateEmail(v),
-  ],
-  password: [
-    (v) => validateRequired(v, 'Password'),
-    (v) => validateMinLength(v, 6, 'Password'),
-  ],
   shelterName: [
     (v) => validateRequired(v, 'Shelter Name'),
     (v) => validateMaxLength(v, 150, 'Shelter Name'),
@@ -132,11 +127,10 @@ export const SignUpForm = () => {
   const [sharedErrors, setSharedErrors] = useState({});
 
   const validateSharedFields = useCallback(() => {
-    const schema = validationSchema;
-    if (!schema) return { isValid: false, errors: {} };
+    if (!role) return { isValid: false, errors: {} };
 
-    const emailValidators = schema.email || [];
-    const passwordValidators = schema.password || [];
+    const emailValidators = sharedSchema.email || [];
+    const passwordValidators = sharedSchema.password || [];
 
     const errors = {};
     let isValid = true;
@@ -161,7 +155,7 @@ export const SignUpForm = () => {
 
     setSharedErrors(errors);
     return { isValid, errors };
-  }, [email, password, validationSchema]);
+  }, [email, password, role]);
 
   // Clear shared field error when value changes
   const handleEmailChange = useCallback((value) => {

@@ -14,7 +14,7 @@ This document defines the requirements for the NestJS backend of the **Paws to t
 - **Volunteer**: A user registered with the `volunteer` role; has a profile, activity history, and applications to opportunities.
 - **Shelter**: An organization registered with the `shelter` role; manages volunteering opportunities.
 - **Opportunity**: A volunteering shift or activity published by a Shelter.
-- **Application**: A Volunteer's request to participate in an Opportunity. Possible statuses: `pending`, `approved`, `rejected`.
+- **Application**: A Volunteer's registration to participate in an Opportunity. Volunteers are auto-approved upon registration (status is immediately `approved`). No shelter approval is required.
 - **Badge**: An achievement awarded to a Volunteer upon reaching certain milestones.
 - **Dashboard_Volunteer**: The Volunteer's personal dashboard view.
 - **Dashboard_Shelter**: The Shelter's management dashboard view.
@@ -98,31 +98,31 @@ This document defines the requirements for the NestJS backend of the **Paws to t
 
 ### Requirement 6: Shelter Dashboard
 
-**User Story:** As an authenticated shelter administrator, I want to access my shelter's dashboard with statistics and recent applications, to manage my volunteers.
+**User Story:** As an authenticated shelter administrator, I want to access my shelter's dashboard with statistics and recent volunteer registrations, to monitor my shelter's activity.
 
 #### Acceptance Criteria
 
 1. THE JWT_Guard SHALL protect the endpoints `GET /shelters/me/dashboard` and `GET /shelters/me/applications/recent`; IF the token is absent or invalid, THE API SHALL respond with HTTP 401.
 2. IF the token is valid but the `role` claim is not `shelter`, THEN THE API SHALL respond with HTTP 403.
-3. WHEN `GET /shelters/me/dashboard` is performed with a valid token with role `shelter`, THE API SHALL respond with HTTP 200 and an object with: `name` (string), `location` (string), `totalAnimals` (integer, sum of animals currently registered in the Shelter), `volunteers` (integer, count of Volunteers with at least one `approved` Application in the Shelter), `activeOpportunities` (integer, count of Opportunities with `isActive: true`), `pendingApplications` (integer, count of Applications with `status: "pending"` in the Shelter's Opportunities).
-4. WHEN `GET /shelters/me/applications/recent` is performed with a valid token with role `shelter`, THE API SHALL respond with HTTP 200 and an array of up to 10 most recent applications ordered by `createdAt` descending, each with: `name` (Volunteer's name), `role` (Opportunity's name), `time` (string in readable relative format, e.g., `"2 hours ago"`). IF there are no applications, THE API SHALL respond with `[]`.
+3. WHEN `GET /shelters/me/dashboard` is performed with a valid token with role `shelter`, THE API SHALL respond with HTTP 200 and an object with: `name` (string), `location` (string), `totalAnimals` (integer, sum of animals currently registered in the Shelter), `volunteers` (integer, count of Volunteers with at least one registration in the Shelter's Opportunities), `activeOpportunities` (integer, count of Opportunities with `isActive: true`).
+4. WHEN `GET /shelters/me/applications/recent` is performed with a valid token with role `shelter`, THE API SHALL respond with HTTP 200 and an array of up to 10 most recent volunteer registrations ordered by `createdAt` descending, each with: `name` (Volunteer's name), `role` (Opportunity's name), `time` (string in readable relative format, e.g., `"2 hours ago"`). IF there are no registrations, THE API SHALL respond with `[]`.
 5. IF the token does not correspond to an existing Shelter profile, THEN THE API SHALL respond with HTTP 404.
 
 ---
 
-### Requirement 7: Volunteer Applications
+### Requirement 7: Volunteer Registrations
 
-**User Story:** As an authenticated volunteer, I want to see my applications to opportunities with their updated status, to know which ones I was accepted or rejected for.
+**User Story:** As an authenticated volunteer, I want to register for volunteering opportunities and see my registrations, to track my participation.
 
 #### Acceptance Criteria
 
 1. THE JWT_Guard SHALL protect `GET /volunteers/me/applications` and `POST /opportunities/:id/apply`; IF the token is absent or invalid, THE API SHALL respond with HTTP 401.
-2. WHEN `GET /volunteers/me/applications` is performed with a valid token, THE API SHALL respond with HTTP 200 and an array of the authenticated Volunteer's applications with: `id`, `title`, `shelter`, `location`, `date`, `hours`, `status`. IF there are no applications, THE API SHALL respond with `[]`.
-3. THE API SHALL include applications in the `pending`, `approved`, and `rejected` statuses.
-4. IF the query parameter `status` is present and its value is one of `pending`, `approved`, or `rejected`, THE API SHALL filter the result by that status; IF the value is none of the three, THE API SHALL respond with HTTP 400 and a descriptive message.
-5. WHEN `POST /opportunities/:id/apply` is performed with a valid token, THE API SHALL create an Application with status `pending` and respond with HTTP 201 and the object `{ id, opportunityId, volunteerId, status: "pending" }`.
-6. IF the Volunteer already has an Application with status `pending` or `approved` for that same Opportunity, THEN THE API SHALL respond with HTTP 409 and `message: "You already have an active application for this opportunity"`.
-7. IF the Opportunity identifier does not exist, THEN THE API SHALL respond with HTTP 404.
+2. WHEN `GET /volunteers/me/applications` is performed with a valid token, THE API SHALL respond with HTTP 200 and an array of the authenticated Volunteer's registrations with: `id`, `title`, `shelter`, `location`, `date`, `hours`, `status`. IF there are no registrations, THE API SHALL respond with `[]`.
+3. THE API SHALL include registrations with status `approved` (all registrations are auto-approved).
+4. WHEN `POST /opportunities/:id/apply` is performed with a valid token, THE API SHALL create a registration with status `approved` immediately (no shelter approval required), decrement the Opportunity's `availableSpaces` by 1, and respond with HTTP 201 and the object `{ id, opportunityId, volunteerId, status: "registered" }`.
+5. IF the Volunteer is already registered for that same Opportunity, THEN THE API SHALL respond with HTTP 409 and `message: "You are already registered for this opportunity"`.
+6. IF the Opportunity identifier does not exist, THEN THE API SHALL respond with HTTP 404.
+7. IF the Opportunity has no available spaces (`availableSpaces` is 0), THEN THE API SHALL respond with HTTP 409 and `message: "No available spaces for this opportunity"`.
 
 ---
 
@@ -154,20 +154,18 @@ This document defines the requirements for the NestJS backend of the **Paws to t
 
 ---
 
-### Requirement 10: Application Management by Shelter
+### Requirement 10: Shelter Visibility of Registrations
 
-**User Story:** As an authenticated shelter administrator, I want to approve or reject volunteer applications, to control who participates in my shifts.
+**User Story:** As an authenticated shelter administrator, I want to see which volunteers registered for my opportunities, to know who is participating in each shift.
 
 #### Acceptance Criteria
 
-1. THE JWT_Guard SHALL protect `PATCH /applications/:id/status`; IF the token is absent or invalid, THE API SHALL respond with HTTP 401.
-2. WHEN `PATCH /applications/:id/status` is performed with `{ "status": "approved" }` or `{ "status": "rejected" }`, THE API SHALL update the Application's status and respond with HTTP 200 with the updated Application object.
-3. IF the `status` value in the payload is not `"approved"` or `"rejected"`, THEN THE API SHALL respond with HTTP 400.
-4. IF the Application with `:id` does not exist, THEN THE API SHALL respond with HTTP 404.
-5. IF the Application does not belong to an Opportunity owned by the authenticated Shelter, THEN THE API SHALL respond with HTTP 403.
-6. WHEN an Application changes to `approved` from a status other than `approved`, THE API SHALL decrement the Opportunity's `availableSpaces` by 1.
-7. WHEN an Application changes from `approved` to `rejected`, THE API SHALL increment the Opportunity's `availableSpaces` by 1.
-8. IF `availableSpaces` is `0` before approving, THEN THE API SHALL respond with HTTP 409 and `message: "No available spaces"`.
+1. THE JWT_Guard SHALL protect `GET /shelters/me/applications/recent`; IF the token is absent or invalid, THE API SHALL respond with HTTP 401.
+2. IF the token is valid but the `role` claim is not `shelter`, THEN THE API SHALL respond with HTTP 403.
+3. WHEN `GET /shelters/me/applications/recent` is performed with a valid `shelter` role token, THE API SHALL respond with HTTP 200 and an array of up to 10 most recent volunteer registrations ordered by `createdAt` descending, each with: `name` (Volunteer's name), `role` (Opportunity's name), `time` (string in readable relative format, e.g., `"2 hours ago"`). IF there are no registrations, THE API SHALL respond with `[]`.
+4. IF the token does not correspond to an existing Shelter profile, THEN THE API SHALL respond with HTTP 404.
+
+> Note: Shelters do not approve or reject volunteer registrations. Volunteers register directly and are immediately confirmed.
 
 ---
 

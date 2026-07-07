@@ -1,4 +1,5 @@
 import { ApplyButton } from './ApplyButton';
+import { formatDate } from "../../utils/formatDate"
 
 export const VolunteeringDetailCard = ({ opportunity }) => {
   const shelterDisplay = opportunity.shelterName?.name || 'Unknown Shelter';
@@ -31,7 +32,7 @@ export const VolunteeringDetailCard = ({ opportunity }) => {
             {shelterDisplay}
           </p>
           <p><strong>Location:</strong> {opportunity.location}</p>
-          <p><strong>Date:</strong> {opportunity.date}</p>
+          <p><strong>Date:</strong> {formatDate(opportunity.date)}</p>
           <p><strong>Duration:</strong> {opportunity.duration}</p>
           <p><strong>Spots:</strong> {opportunity.availableSpaces}/{opportunity.totalSpaces}</p>
         </div>
