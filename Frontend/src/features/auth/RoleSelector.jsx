@@ -1,11 +1,11 @@
 export const RoleSelector = ({ selectedRole, onChange }) => {
   const roles = [
-    { value: "volunteer", label: "Voluntario" },
-    { value: "shelter", label: "Refugio" },
+    { value: "volunteer", label: "Volunteer" },
+    { value: "shelter", label: "Shelter" },
   ]
 
   return (
-    <div className="flex gap-3" role="group" aria-label="Selecciona tu rol">
+    <div className="flex gap-3" role="group" aria-label="Select your role">
       {roles.map(({ value, label }) => {
         const isSelected = selectedRole === value
 

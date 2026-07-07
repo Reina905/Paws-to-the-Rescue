@@ -40,7 +40,7 @@ export const ShelterDashboard = () => {
         ) : statsError ? (
           <div className="bg-white rounded-2xl p-4 border border-primary-light">
             <p className="text-sm text-secondary-dark">
-              ⚠️ Could not load metrics from the server.
+               Could not load metrics from the server.
               {statsError.toLowerCase().includes('unauthorized') && (
                 <span> Try signing out and logging in again.</span>
               )}
@@ -61,7 +61,7 @@ export const ShelterDashboard = () => {
           {regsError && (
             <div className="mt-4 bg-white rounded-2xl p-4 border border-primary-light">
               <p className="text-sm text-secondary-dark">
-                ⚠️ Could not load registrations from the server.
+                 Could not load registrations from the server.
               </p>
             </div>
           )}

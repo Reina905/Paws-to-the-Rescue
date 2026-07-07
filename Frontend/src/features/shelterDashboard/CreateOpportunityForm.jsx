@@ -14,13 +14,13 @@ import {
 } from '../../utils/formValidation';
 
 const FALLBACK_CATEGORIES = [
-  'Alimentación',
-  'Limpieza',
-  'Paseos',
-  'Cuidado médico',
-  'Eventos',
-  'Transporte',
-  'Otro',
+  'Feeding',
+  'Cleaning',
+  'Walks',
+  'Medical Care',
+  'Events',
+  'Transport',
+  'Other',
 ];
 
 /**
@@ -43,26 +43,26 @@ export const CreateOpportunityForm = () => {
   // Validation schema
   const validationSchema = useMemo(() => ({
     name: [
-      (v) => validateRequired(v, 'Nombre'),
-      (v) => validateMaxLength(v, 200, 'Nombre'),
+      (v) => validateRequired(v, 'Name'),
+      (v) => validateMaxLength(v, 200, 'Name'),
     ],
     category: [
-      (v) => validateRequired(v, 'Categoría'),
+      (v) => validateRequired(v, 'Category'),
     ],
     location: [
-      (v) => validateRequired(v, 'Ubicación'),
-      (v) => validateMaxLength(v, 200, 'Ubicación'),
+      (v) => validateRequired(v, 'Location'),
+      (v) => validateMaxLength(v, 200, 'Location'),
     ],
     date: [
-      (v) => validateRequired(v, 'Fecha'),
+      (v) => validateRequired(v, 'Date'),
       (v) => validateFutureDate(v),
     ],
     duration: [
-      (v) => validateRequired(v, 'Duración'),
+      (v) => validateRequired(v, 'Duration'),
     ],
     totalSpaces: [
-      (v) => validateRequired(v, 'Espacios totales'),
-      (v) => validateIntRange(v, 1, 10000, 'Espacios totales'),
+      (v) => validateRequired(v, 'Total Spaces'),
+      (v) => validateIntRange(v, 1, 10000, 'Total Spaces'),
     ],
     image: [
       (v) => validateUrl(v),
@@ -139,7 +139,7 @@ export const CreateOpportunityForm = () => {
       clearTimeout(timeoutId);
 
       if (error.name === 'AbortError' || error.code === 'ERR_CANCELED') {
-        throw new Error('La solicitud tardó demasiado. Intenta de nuevo.');
+        throw new Error('The request took too long. Please try again.');
       }
 
       // Map status codes to descriptive messages
@@ -147,14 +147,14 @@ export const CreateOpportunityForm = () => {
         const status = error.response.status;
         if (status === 400) {
           throw new Error(
-            error.response.data?.message || 'Datos inválidos. Verifica los campos e intenta de nuevo.'
+            error.response.data?.message || 'Invalid data. Please check the fields and try again.'
           );
         }
         if (status === 401) {
-          throw new Error('No autorizado. Por favor inicia sesión nuevamente.');
+          throw new Error('Unauthorized. Please log in again.');
         }
         if (status >= 500) {
-          throw new Error('Error del servidor. Intenta de nuevo más tarde.');
+          throw new Error('Server error. Please try again later.');
         }
       }
 
@@ -196,7 +196,7 @@ export const CreateOpportunityForm = () => {
     try {
       const response = await submit(values);
       if (response && response.status === 201) {
-        setSuccessMessage('¡Oportunidad creada exitosamente!');
+        setSuccessMessage('Opportunity created successfully!');
         setTimeout(() => {
           navigate('/shelter-dashboard');
         }, 1500);
@@ -236,20 +236,20 @@ export const CreateOpportunityForm = () => {
       {/* Name */}
       <FormField
         id="opp-name"
-        label="Nombre de la oportunidad"
+        label="Opportunity Name"
         type="text"
         value={values.name}
         onChange={(val) => setField('name', val)}
         error={errors.name}
         required
         maxLength={200}
-        placeholder="Ej: Paseo de perros en el parque"
+        placeholder="E.g.: Dog walking in the park"
       />
 
       {/* Category — custom select since FormField only renders <input> */}
       <div className="mt-5">
         <label htmlFor="opp-category" className="text-sm text-gray-600">
-          Categoría
+          Category
           <span className="text-red-500 ml-1" aria-hidden="true">*</span>
         </label>
 
@@ -269,7 +269,7 @@ export const CreateOpportunityForm = () => {
             aria-describedby={categoryHasError ? categoryErrorId : undefined}
             className="w-full outline-none bg-transparent appearance-none cursor-pointer"
           >
-            <option value="">Selecciona una categoría</option>
+            <option value="">Select a category</option>
             {categories.map((cat) => (
               <option key={cat} value={cat}>
                 {cat}
@@ -292,20 +292,20 @@ export const CreateOpportunityForm = () => {
       {/* Location */}
       <FormField
         id="opp-location"
-        label="Ubicación"
+        label="Location"
         type="text"
         value={values.location}
         onChange={(val) => setField('location', val)}
         error={errors.location}
         required
         maxLength={200}
-        placeholder="Ej: Parque Central, Ciudad"
+        placeholder="E.g.: Central Park, City"
       />
 
       {/* Date */}
       <FormField
         id="opp-date"
-        label="Fecha"
+        label="Date"
         type="date"
         value={values.date}
         onChange={(val) => setField('date', val)}
@@ -316,19 +316,19 @@ export const CreateOpportunityForm = () => {
       {/* Duration */}
       <FormField
         id="opp-duration"
-        label="Duración"
+        label="Duration"
         type="text"
         value={values.duration}
         onChange={(val) => setField('duration', val)}
         error={errors.duration}
         required
-        placeholder="Ej: 2 horas"
+        placeholder="E.g.: 2 hours"
       />
 
       {/* Total Spaces */}
       <FormField
         id="opp-totalSpaces"
-        label="Espacios totales"
+        label="Total Spaces"
         type="number"
         value={values.totalSpaces}
         onChange={(val) => setField('totalSpaces', val)}
@@ -336,18 +336,18 @@ export const CreateOpportunityForm = () => {
         required
         min={1}
         max={10000}
-        placeholder="Ej: 10"
+        placeholder="E.g.: 10"
       />
 
       {/* Image (optional) */}
       <FormField
         id="opp-image"
-        label="Imagen (URL, opcional)"
+        label="Image (URL, optional)"
         type="url"
         value={values.image}
         onChange={(val) => setField('image', val)}
         error={errors.image}
-        placeholder="https://ejemplo.com/imagen.jpg"
+        placeholder="https://example.com/image.jpg"
       />
 
       {/* Submit button */}
@@ -357,7 +357,7 @@ export const CreateOpportunityForm = () => {
           disabled={isSubmitting || Boolean(categoryError)}
           className="w-full rounded-full bg-primary px-6 py-3 text-white font-medium hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          {isSubmitting ? 'Creando oportunidad...' : 'Crear Oportunidad'}
+          {isSubmitting ? 'Creating opportunity...' : 'Create Opportunity'}
         </button>
       </div>
     </form>

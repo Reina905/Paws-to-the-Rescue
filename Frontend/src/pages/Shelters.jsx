@@ -24,7 +24,7 @@ export const Shelters = () => {
           {loading && <LoadingSpinner />}
           {error && <ErrorMessage message={error} onRetry={refetch} />}
           {!loading && !error && data?.length === 0 && (
-            <EmptyState message="No hay refugios registrados en este momento." />
+            <EmptyState message="No shelters registered at the moment." />
           )}
           {!loading && !error && data?.length > 0 && (
             <SheltersList shelters={data} />

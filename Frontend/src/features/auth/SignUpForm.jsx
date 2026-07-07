@@ -29,20 +29,20 @@ const volunteerSchema = {
     (v) => validateEmail(v),
   ],
   password: [
-    (v) => validateRequired(v, 'Contraseña'),
-    (v) => validateMinLength(v, 6, 'Contraseña'),
+    (v) => validateRequired(v, 'Password'),
+    (v) => validateMinLength(v, 6, 'Password'),
   ],
   name: [
-    (v) => validateRequired(v, 'Nombre'),
-    (v) => validateMaxLength(v, 100, 'Nombre'),
+    (v) => validateRequired(v, 'First Name'),
+    (v) => validateMaxLength(v, 100, 'First Name'),
   ],
   lastName: [
-    (v) => validateRequired(v, 'Apellido'),
-    (v) => validateMaxLength(v, 100, 'Apellido'),
+    (v) => validateRequired(v, 'Last Name'),
+    (v) => validateMaxLength(v, 100, 'Last Name'),
   ],
-  description: [(v) => validateMaxLength(v, 500, 'Descripción')],
+  description: [(v) => validateMaxLength(v, 500, 'Description')],
   skills: [],
-  contactNumber: [(v) => validateMaxLength(v, 20, 'Número de contacto')],
+  contactNumber: [(v) => validateMaxLength(v, 20, 'Contact Number')],
 };
 
 const shelterSchema = {
@@ -51,20 +51,20 @@ const shelterSchema = {
     (v) => validateEmail(v),
   ],
   password: [
-    (v) => validateRequired(v, 'Contraseña'),
-    (v) => validateMinLength(v, 6, 'Contraseña'),
+    (v) => validateRequired(v, 'Password'),
+    (v) => validateMinLength(v, 6, 'Password'),
   ],
   shelterName: [
-    (v) => validateRequired(v, 'Nombre del refugio'),
-    (v) => validateMaxLength(v, 150, 'Nombre del refugio'),
+    (v) => validateRequired(v, 'Shelter Name'),
+    (v) => validateMaxLength(v, 150, 'Shelter Name'),
   ],
   location: [
-    (v) => validateRequired(v, 'Ubicación'),
-    (v) => validateMaxLength(v, 200, 'Ubicación'),
+    (v) => validateRequired(v, 'Location'),
+    (v) => validateMaxLength(v, 200, 'Location'),
   ],
-  description: [(v) => validateMaxLength(v, 500, 'Descripción')],
-  contactNumber: [(v) => validateMaxLength(v, 20, 'Número de contacto')],
-  animalCapacity: [(v) => validateIntRange(v, 1, 10000, 'Capacidad de animales')],
+  description: [(v) => validateMaxLength(v, 500, 'Description')],
+  contactNumber: [(v) => validateMaxLength(v, 20, 'Contact Number')],
+  animalCapacity: [(v) => validateIntRange(v, 1, 10000, 'Animal Capacity')],
   logo: [(v) => validateUrl(v)],
 };
 
@@ -249,7 +249,7 @@ export const SignUpForm = () => {
       const message =
         profileErr.response?.data?.message ||
         profileErr.message ||
-        'No se pudo crear el perfil. Intenta de nuevo.';
+        'Could not create profile. Please try again.';
       setProfileError(message);
       // Profile failed but auth succeeded — don't throw, let the user see the error
       return data;
@@ -279,7 +279,7 @@ export const SignUpForm = () => {
 
     // Check role is selected
     if (!role) {
-      setRoleError('Por favor selecciona un rol para continuar');
+      setRoleError('Please select a role to continue');
       return;
     }
 
@@ -299,9 +299,9 @@ export const SignUpForm = () => {
 
       // If profile creation didn't fail, show success
       if (!profileFailedRef.current) {
-        setSuccessMessage('¡Cuenta creada exitosamente! Redirigiendo al inicio de sesión...');
+        setSuccessMessage('Account created successfully! Redirecting to login...');
         setTimeout(() => {
-          navigate('/login', { state: { message: 'Registro exitoso. Inicia sesión.' } });
+          navigate('/login', { state: { message: 'Registration successful. Please log in.' } });
         }, 1500);
       }
     } catch {
@@ -333,24 +333,24 @@ export const SignUpForm = () => {
           logo: roleValues.logo || undefined,
         });
       }
-      setSuccessMessage('¡Cuenta creada exitosamente! Redirigiendo al inicio de sesión...');
+      setSuccessMessage('Account created successfully! Redirecting to login...');
       setTimeout(() => {
-        navigate('/login', { state: { message: 'Registro exitoso. Inicia sesión.' } });
+        navigate('/login', { state: { message: 'Registration successful. Please log in.' } });
       }, 1500);
     } catch (error) {
       const message =
         error.response?.data?.message ||
         error.message ||
-        'No se pudo crear el perfil. Intenta de nuevo.';
+        'Could not create profile. Please try again.';
       setProfileError(message);
     }
   }, [role, roleValues, navigate]);
 
   return (
     <div className="bg-white rounded-[36px] shadow-xl p-10">
-      <h2 className="text-3xl font-bold text-gray-900">Crear Cuenta</h2>
+      <h2 className="text-3xl font-bold text-gray-900">Create Account</h2>
       <p className="text-gray-500 mt-2">
-        Regístrate como voluntario o refugio
+        Sign up as a volunteer or shelter
       </p>
 
       {/* ARIA live region for success announcement */}
@@ -396,13 +396,13 @@ export const SignUpForm = () => {
               onChange={handleEmailChange}
               error={sharedErrors.email}
               required
-              placeholder="tu@ejemplo.com"
+              placeholder="you@example.com"
               icon={<Mail size={18} />}
             />
 
             <FormField
               id="password"
-              label="Contraseña"
+              label="Password"
               type="password"
               value={password}
               onChange={handlePasswordChange}
@@ -434,19 +434,19 @@ export const SignUpForm = () => {
               disabled={isSubmitting}
               className="w-full mt-8 bg-primary text-white py-3 rounded-full font-semibold hover:bg-primary-dark transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isSubmitting ? 'Creando cuenta...' : 'Crear Cuenta'}
+              {isSubmitting ? 'Creating account...' : 'Create Account'}
             </button>
           </>
         )}
       </form>
 
       <p className="text-center text-sm text-gray-500 mt-6">
-        ¿Ya tienes una cuenta?{' '}
+        Already have an account?{' '}
         <button
           onClick={() => navigate('/login')}
           className="text-primary font-semibold"
         >
-          Iniciar Sesión
+          Log In
         </button>
       </p>
     </div>

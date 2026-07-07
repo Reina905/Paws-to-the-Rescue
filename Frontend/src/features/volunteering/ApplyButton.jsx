@@ -73,7 +73,7 @@ export const ApplyButton = ({ opportunityId, availableSpaces, onApplySuccess }) 
       await api.post(`/opportunities/${opportunityId}/apply`);
 
       setRegistered(true);
-      setStatusMessage('¡Te has inscrito exitosamente!');
+      setStatusMessage('You have successfully registered!');
       setIsError(false);
 
       if (onApplySuccess) {
@@ -83,13 +83,13 @@ export const ApplyButton = ({ opportunityId, availableSpaces, onApplySuccess }) 
       const statusCode = error.response?.status;
 
       if (statusCode === 409) {
-        setStatusMessage('Ya estás inscrito en esta oportunidad.');
+        setStatusMessage('You are already registered for this opportunity.');
         setIsError(true);
       } else if (statusCode === 404) {
-        setStatusMessage('Oportunidad no encontrada.');
+        setStatusMessage('Opportunity not found.');
         setIsError(true);
       } else {
-        setStatusMessage('Error de conexión. Intenta de nuevo.');
+        setStatusMessage('Connection error. Please try again.');
         setIsError(true);
       }
     } finally {

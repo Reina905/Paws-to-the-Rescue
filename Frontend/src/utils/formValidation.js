@@ -11,7 +11,7 @@
  */
 export function validateRequired(value, fieldName) {
   if (value === null || value === undefined || String(value).trim() === '') {
-    return `${fieldName} es requerido`;
+    return `${fieldName} is required`;
   }
   return null;
 }
@@ -27,7 +27,7 @@ export function validateEmail(value) {
   }
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailPattern.test(String(value).trim())) {
-    return 'El formato de email es inválido';
+    return 'Invalid email format';
   }
   return null;
 }
@@ -44,7 +44,7 @@ export function validateMinLength(value, min, fieldName) {
     return null; // Empty check is handled by validateRequired
   }
   if (String(value).length < min) {
-    return `${fieldName} debe tener al menos ${min} caracteres`;
+    return `${fieldName} must be at least ${min} characters`;
   }
   return null;
 }
@@ -61,7 +61,7 @@ export function validateMaxLength(value, max, fieldName) {
     return null; // Empty values pass (handled by validateRequired if needed)
   }
   if (String(value).length > max) {
-    return `${fieldName} no debe superar los ${max} caracteres`;
+    return `${fieldName} must not exceed ${max} characters`;
   }
   return null;
 }
@@ -81,7 +81,7 @@ export function validateIntRange(value, min, max, fieldName) {
   }
   const num = Number(value);
   if (!Number.isInteger(num) || num < min || num > max) {
-    return `${fieldName} debe ser un número entero entre ${min} y ${max}`;
+    return `${fieldName} must be a whole number between ${min} and ${max}`;
   }
   return null;
 }
@@ -99,11 +99,11 @@ export function validateUrl(value) {
   try {
     const url = new URL(String(value).trim());
     if (url.protocol !== 'http:' && url.protocol !== 'https:') {
-      return 'El valor debe ser una URL válida';
+      return 'Value must be a valid URL';
     }
     return null;
   } catch {
-    return 'El valor debe ser una URL válida';
+    return 'Value must be a valid URL';
   }
 }
 
@@ -118,7 +118,7 @@ export function validateFutureDate(value) {
   }
   const inputDate = new Date(String(value).trim());
   if (isNaN(inputDate.getTime())) {
-    return 'La fecha no es válida';
+    return 'Invalid date';
   }
   // Compare by day only (strip time component)
   const today = new Date();
@@ -126,7 +126,7 @@ export function validateFutureDate(value) {
   inputDate.setHours(0, 0, 0, 0);
 
   if (inputDate < today) {
-    return 'La fecha debe ser hoy o una fecha futura';
+    return 'Date must be today or in the future';
   }
   return null;
 }

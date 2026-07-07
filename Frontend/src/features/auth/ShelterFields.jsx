@@ -19,7 +19,7 @@ export const ShelterFields = ({ values, errors, onFieldChange }) => {
     <>
       <FormField
         id="shelterName"
-        label="Nombre del refugio"
+        label="Shelter Name"
         type="text"
         value={values.shelterName}
         onChange={(value) => onFieldChange('shelterName', value)}
@@ -31,7 +31,7 @@ export const ShelterFields = ({ values, errors, onFieldChange }) => {
 
       <FormField
         id="location"
-        label="Ubicación"
+        label="Location"
         type="text"
         value={values.location}
         onChange={(value) => onFieldChange('location', value)}
@@ -43,18 +43,18 @@ export const ShelterFields = ({ values, errors, onFieldChange }) => {
 
       <FormField
         id="description"
-        label="Descripción"
+        label="Description"
         type="text"
         value={values.description}
         onChange={(value) => onFieldChange('description', value)}
         error={errors.description}
         maxLength={500}
-        placeholder="Describe tu refugio..."
+        placeholder="Describe your shelter..."
       />
 
       <FormField
         id="contactNumber"
-        label="Número de contacto"
+        label="Contact Number"
         type="text"
         value={values.contactNumber}
         onChange={(value) => onFieldChange('contactNumber', value)}
@@ -65,7 +65,7 @@ export const ShelterFields = ({ values, errors, onFieldChange }) => {
 
       <FormField
         id="animalCapacity"
-        label="Capacidad de animales"
+        label="Animal Capacity"
         type="number"
         value={values.animalCapacity}
         onChange={(value) => onFieldChange('animalCapacity', value)}

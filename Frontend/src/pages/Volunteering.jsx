@@ -26,7 +26,7 @@ export const Volunteering = () => {
           {loading && <LoadingSpinner />}
           {error && <ErrorMessage message={error} onRetry={refetch} />}
           {!loading && !error && data?.length === 0 && (
-            <EmptyState message="No hay oportunidades disponibles en este momento." />
+            <EmptyState message="No opportunities available at the moment." />
           )}
           {!loading && !error && data?.length > 0 && (
             <VolunteeringList opportunities={data} />

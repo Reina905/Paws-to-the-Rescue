@@ -12,7 +12,7 @@ export const ShelterOpportunities = ({ opportunities, shelter }) => {
             subtitle="Join the shelter in its daily mission and help improve the lives of rescued cats through meaningful volunteer work."
             className="mb-12"
           />
-          <p className="text-center text-gray-500">No hay oportunidades activas en este momento.</p>
+          <p className="text-center text-gray-500">No active opportunities at the moment.</p>
         </PaddingLayout>
       </section>
     )

@@ -40,7 +40,7 @@ export class SheltersService {
     }
 
     if (existing) {
-      throw new ConflictException('El perfil de refugio ya existe');
+      throw new ConflictException('Shelter profile already exists');
     }
 
     const { data, error } = await this.supabase

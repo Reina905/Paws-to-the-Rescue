@@ -1,34 +1,28 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, UseGuards, Request } from '@nestjs/common';
 import { BadgesService } from './badges.service';
-import { CreateBadgeDto } from './dto/create-badge.dto';
-import { UpdateBadgeDto } from './dto/update-badge.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles.decorator';
 
 @Controller('badges')
 export class BadgesController {
   constructor(private readonly badgesService: BadgesService) {}
 
-  @Post()
-  create(@Body() createBadgeDto: CreateBadgeDto) {
-    return this.badgesService.create(createBadgeDto);
-  }
-
+  /**
+   * Get all available badges in the system.
+   */
   @Get()
   findAll() {
     return this.badgesService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.badgesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBadgeDto: UpdateBadgeDto) {
-    return this.badgesService.update(+id, updateBadgeDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.badgesService.remove(+id);
+  /**
+   * Get the current volunteer's earned badges.
+   */
+  @Get('me')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('volunteer')
+  getMyBadges(@Request() req) {
+    return this.badgesService.getEarnedBadgesByUserId(req.user.id);
   }
 }

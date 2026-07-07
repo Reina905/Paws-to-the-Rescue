@@ -16,13 +16,13 @@ export function useApply() {
     } catch (err) {
       const status = err.response?.status;
       if (status === 409) {
-        setError('Ya tienes una aplicación activa para esta oportunidad.');
+        setError('You already have an active application for this opportunity.');
       } else if (status === 404) {
-        setError('La oportunidad no existe.');
+        setError('Opportunity not found.');
       } else if (status === 401) {
         setError('AUTH_REQUIRED');
       } else {
-        setError(err.response?.data?.message || 'Error al aplicar.');
+        setError(err.response?.data?.message || 'Failed to apply.');
       }
     } finally {
       setLoading(false);

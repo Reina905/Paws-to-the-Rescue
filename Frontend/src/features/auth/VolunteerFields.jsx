@@ -16,7 +16,7 @@ export const VolunteerFields = ({ values, errors, onFieldChange }) => {
     <>
       <FormField
         id="name"
-        label="Nombre"
+        label="First Name"
         type="text"
         value={values.name}
         onChange={(value) => onFieldChange("name", value)}
@@ -28,7 +28,7 @@ export const VolunteerFields = ({ values, errors, onFieldChange }) => {
 
       <FormField
         id="lastName"
-        label="Apellido"
+        label="Last Name"
         type="text"
         value={values.lastName}
         onChange={(value) => onFieldChange("lastName", value)}
@@ -40,28 +40,28 @@ export const VolunteerFields = ({ values, errors, onFieldChange }) => {
 
       <FormField
         id="description"
-        label="Descripción"
+        label="Description"
         type="text"
         value={values.description}
         onChange={(value) => onFieldChange("description", value)}
         error={errors.description}
-        placeholder="Cuéntanos sobre ti..."
+        placeholder="Tell us about yourself..."
         maxLength={500}
       />
 
       <FormField
         id="skills"
-        label="Habilidades"
+        label="Skills"
         type="text"
         value={values.skills}
         onChange={(value) => onFieldChange("skills", value)}
         error={errors.skills}
-        placeholder="Ej: Cuidado animal, primeros auxilios..."
+        placeholder="E.g.: Animal care, first aid..."
       />
 
       <FormField
         id="contactNumber"
-        label="Número de contacto"
+        label="Contact Number"
         type="text"
         value={values.contactNumber}
         onChange={(value) => onFieldChange("contactNumber", value)}

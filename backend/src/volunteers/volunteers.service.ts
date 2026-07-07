@@ -51,7 +51,7 @@ export class VolunteersService {
     }
 
     if (existing) {
-      throw new ConflictException('El perfil de voluntario ya existe');
+      throw new ConflictException('Volunteer profile already exists');
     }
 
     const { data, error } = await this.supabase

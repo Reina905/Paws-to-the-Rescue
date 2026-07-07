@@ -202,7 +202,7 @@ export class OpportunitiesService {
     const opportunity = await this.findOpportunityById(opportunityId);
 
     if (opportunity.available_spaces <= 0) {
-      throw new ConflictException('No hay espacios disponibles en esta oportunidad');
+      throw new ConflictException('No available spaces for this opportunity');
     }
 
     // Check if volunteer is already registered
@@ -220,7 +220,7 @@ export class OpportunitiesService {
 
     if (existingApp && existingApp.length > 0) {
       throw new ConflictException(
-        'Ya estás inscrito en esta oportunidad',
+        'You are already registered for this opportunity',
       );
     }
 

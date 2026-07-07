@@ -31,7 +31,7 @@ export const VolunteeringDetails = () => {
           <PaddingLayout>
             {is404 ? (
               <div className="text-center py-12">
-                <p className="text-gray-500 text-lg">Oportunidad no encontrada.</p>
+                <p className="text-gray-500 text-lg">Opportunity not found.</p>
               </div>
             ) : (
               <ErrorMessage message={error} onRetry={refetch} />
@@ -50,7 +50,7 @@ export const VolunteeringDetails = () => {
         <main className="py-24">
           <PaddingLayout>
             <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">Oportunidad no encontrada.</p>
+              <p className="text-gray-500 text-lg">Opportunity not found.</p>
             </div>
           </PaddingLayout>
         </main>

@@ -5,7 +5,7 @@ export const Header = ({
   backgroundType,      // 'video' | 'image' 
   backgroundSrc,        
   overlayClassName = 'bg-black/35',
-  children,              // contenido del hero
+  children,              // hero content
 }) => {
   return (
     <header className="relative w-full h-screen flex flex-col text-white font-semibold overflow-hidden">

@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Este documento describe el diseño técnico del backend NestJS para **Paws to the Rescue**. Se basa en los 12 requisitos definidos en `requirements.md` y aprovecha la infraestructura existente: módulos skeleton (`auth`, `volunteers`, `shelters`, `opportunities`, `badges`, `supabase`), Supabase como base de datos y proveedor de autenticación, y el frontend React que consume la API en `http://localhost:3000`.
+This document describes the technical design of the NestJS backend for **Paws to the Rescue**. It is based on the 12 requirements defined in `requirements.md` and leverages the existing infrastructure: skeleton modules (`auth`, `volunteers`, `shelters`, `opportunities`, `badges`, `supabase`), Supabase as the database and authentication provider, and the React frontend that consumes the API at `http://localhost:3000`.
 
 ---
 
@@ -132,7 +132,7 @@ Este documento describe el diseño técnico del backend NestJS para **Paws to th
 **File:** `src/main.ts`
 
 ```typescript
-// Configuración global: CORS, ValidationPipe, puerto dinámico
+// Global configuration: CORS, ValidationPipe, dynamic port
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
@@ -152,7 +152,7 @@ async function bootstrap() {
 }
 ```
 
-**Requirement Coverage:** R1 (CORS, ValidationPipe, puerto), R12 (errores globales via NestJS defaults)
+**Requirement Coverage:** R1 (CORS, ValidationPipe, port), R12 (global errors via NestJS defaults)
 
 ---
 
@@ -161,8 +161,8 @@ async function bootstrap() {
 **Files:** `src/auth/jwt.strategy.ts`, `src/auth/jwt-auth.guard.ts`, `src/auth/roles.guard.ts`, `src/auth/roles.decorator.ts`
 
 **New additions:**
-- `RolesGuard`: Custom guard que lee `@Roles()` metadata y compara con `req.user.role`
-- `@Roles()` decorator: SetMetadata para declarar roles permitidos
+- `RolesGuard`: Custom guard that reads `@Roles()` metadata and compares with `req.user.role`
+- `@Roles()` decorator: SetMetadata to declare allowed roles
 
 ```typescript
 // roles.decorator.ts
@@ -200,21 +200,21 @@ export class RolesGuard implements CanActivate {
 
 | Method | Path | Auth | Role | Description |
 |--------|------|------|------|-------------|
-| POST   | /volunteers | JWT | any | Crear perfil de voluntario |
-| GET    | /volunteers/top-monthly | - | - | Top 3 voluntarios del mes |
-| GET    | /volunteers/me/dashboard | JWT | volunteer | Dashboard datos |
-| GET    | /volunteers/me/activity | JWT | volunteer | Historial actividades |
-| GET    | /volunteers/me/recommendations | JWT | volunteer | Recomendaciones |
-| GET    | /volunteers/me/applications | JWT | volunteer | Mis aplicaciones |
-| GET    | /volunteers/:id | - | - | Perfil público |
+| POST   | /volunteers | JWT | any | Create volunteer profile |
+| GET    | /volunteers/top-monthly | - | - | Top 3 volunteers of the month |
+| GET    | /volunteers/me/dashboard | JWT | volunteer | Dashboard data |
+| GET    | /volunteers/me/activity | JWT | volunteer | Activity history |
+| GET    | /volunteers/me/recommendations | JWT | volunteer | Recommendations |
+| GET    | /volunteers/me/applications | JWT | volunteer | My applications |
+| GET    | /volunteers/:id | - | - | Public profile |
 
 **Service Methods:**
-- `create(userId, dto)` → insert en `volunteers`, check duplicado
+- `create(userId, dto)` → insert into `volunteers`, check for duplicate
 - `findOne(id)` → select from `volunteers` where id
 - `findByUserId(userId)` → select from `volunteers` where user_id
-- `getTopMonthly()` → aggregate `activity_logs` del mes actual, join `volunteers`, order by hours desc, limit 3
+- `getTopMonthly()` → aggregate `activity_logs` for current month, join `volunteers`, order by hours desc, limit 3
 - `getDashboard(userId)` → volunteer profile + aggregate totalHours from activity_logs + count distinct shelter_id
-- `getActivity(userId)` → select from activity_logs join opportunities, format time relative
+- `getActivity(userId)` → select from activity_logs join opportunities, format time as relative
 - `getRecommendations(userId)` → select active opportunities NOT already applied by user, limit 5
 - `getApplications(userId, statusFilter?)` → select from applications join opportunities join shelters
 
@@ -233,14 +233,14 @@ export class RolesGuard implements CanActivate {
 
 | Method | Path | Auth | Role | Description |
 |--------|------|------|------|-------------|
-| POST   | /shelters | JWT | any | Crear perfil de refugio |
-| GET    | /shelters | - | - | Listar refugios |
-| GET    | /shelters/me/dashboard | JWT | shelter | Dashboard datos |
-| GET    | /shelters/me/applications/recent | JWT | shelter | Aplicaciones recientes |
-| GET    | /shelters/:id | - | - | Detalle refugio + oportunidades |
+| POST   | /shelters | JWT | any | Create shelter profile |
+| GET    | /shelters | - | - | List shelters |
+| GET    | /shelters/me/dashboard | JWT | shelter | Dashboard data |
+| GET    | /shelters/me/applications/recent | JWT | shelter | Recent applications |
+| GET    | /shelters/:id | - | - | Shelter detail + opportunities |
 
 **Service Methods:**
-- `create(userId, dto)` → insert en `shelters`, check duplicado
+- `create(userId, dto)` → insert into `shelters`, check for duplicate
 - `findAll()` → select shelters + count active opportunities per shelter
 - `findOne(id)` → select shelter + select active opportunities for that shelter
 - `findByUserId(userId)` → select from shelters where user_id
@@ -264,12 +264,12 @@ export class RolesGuard implements CanActivate {
 
 | Method | Path | Auth | Role | Description |
 |--------|------|------|------|-------------|
-| GET    | /opportunities | - | - | Listar oportunidades activas (filtrable) |
-| GET    | /opportunities/:id | - | - | Detalle oportunidad |
-| POST   | /opportunities | JWT | shelter | Crear oportunidad |
-| PATCH  | /opportunities/:id | JWT | shelter | Actualizar oportunidad |
+| GET    | /opportunities | - | - | List active opportunities (filterable) |
+| GET    | /opportunities/:id | - | - | Opportunity detail |
+| POST   | /opportunities | JWT | shelter | Create opportunity |
+| PATCH  | /opportunities/:id | JWT | shelter | Update opportunity |
 | DELETE | /opportunities/:id | JWT | shelter | Soft-delete (isActive=false) |
-| POST   | /opportunities/:id/apply | JWT | volunteer | Aplicar a oportunidad |
+| POST   | /opportunities/:id/apply | JWT | volunteer | Apply to opportunity |
 
 **Service Methods:**
 - `findAll(filters)` → select from opportunities where is_active=true, join shelters for shelterName, apply filters
@@ -295,7 +295,7 @@ export class RolesGuard implements CanActivate {
 
 | Method | Path | Auth | Role | Description |
 |--------|------|------|------|-------------|
-| PATCH  | /applications/:id/status | JWT | shelter | Aprobar/rechazar aplicación |
+| PATCH  | /applications/:id/status | JWT | shelter | Approve/reject application |
 
 **Service Methods:**
 - `updateStatus(applicationId, shelterId, newStatus)` → verify ownership, update status, adjust availableSpaces
@@ -366,17 +366,17 @@ class FilterOpportunitiesDto {
 
 ## Error Handling Strategy
 
-1. **NestJS built-in `HttpException`** para todos los errores controlados (400, 401, 403, 404, 409)
-2. **Global Exception Filter** (optional override) que:
-   - Captura errores no controlados → 500 con mensaje genérico
-   - Captura errores de Supabase → log completo en consola, 500 genérico al cliente
-3. **ValidationPipe** maneja automáticamente los 400 con detalle de campos
+1. **NestJS built-in `HttpException`** for all controlled errors (400, 401, 403, 404, 409)
+2. **Global Exception Filter** (optional override) that:
+   - Catches unhandled errors → 500 with generic message
+   - Catches Supabase errors → full log to console, generic 500 to client
+3. **ValidationPipe** automatically handles 400 responses with field details
 
 ---
 
 ## Supabase Integration Pattern
 
-Cada servicio inyecta `SupabaseService` y usa el patrón:
+Each service injects `SupabaseService` and uses the pattern:
 
 ```typescript
 @Injectable()
@@ -402,17 +402,17 @@ export class ExampleService {
 
 ## Key Design Decisions
 
-1. **Supabase como DB + Auth**: No se usa TypeORM/Prisma; las queries van directamente via `@supabase/supabase-js`. Esto simplifica la arquitectura ya que Supabase maneja auth, storage y database.
+1. **Supabase as DB + Auth**: No TypeORM/Prisma is used; queries go directly via `@supabase/supabase-js`. This simplifies the architecture since Supabase handles auth, storage, and database.
 
-2. **Soft-delete para oportunidades**: `DELETE /opportunities/:id` marca `is_active = false` en lugar de eliminar la fila, preservando integridad referencial con applications.
+2. **Soft-delete for opportunities**: `DELETE /opportunities/:id` sets `is_active = false` instead of deleting the row, preserving referential integrity with applications.
 
-3. **Applications como módulo separado**: Aunque las applications están vinculadas a opportunities y volunteers, tienen su propio endpoint para gestión por el shelter, justificando un módulo independiente.
+3. **Applications as a separate module**: Although applications are linked to opportunities and volunteers, they have their own endpoint for shelter management, justifying an independent module.
 
-4. **RolesGuard centralizado**: Un solo guard reutilizable con decorator `@Roles()` evita lógica de autorización duplicada en cada controller.
+4. **Centralized RolesGuard**: A single reusable guard with the `@Roles()` decorator avoids duplicated authorization logic in each controller.
 
-5. **Tiempo relativo calculado en backend**: Los campos `time` ("2 days ago") se calculan server-side para consistencia, usando diferencia de timestamps con `Date.now()`.
+5. **Relative time calculated on backend**: The `time` fields ("2 days ago") are calculated server-side for consistency, using timestamp differences with `Date.now()`.
 
-6. **class-validator + class-transformer**: Validación declarativa en DTOs, activada globalmente por `ValidationPipe`.
+6. **class-validator + class-transformer**: Declarative validation in DTOs, activated globally by `ValidationPipe`.
 
 ---
 
@@ -425,7 +425,7 @@ export class ExampleService {
 }
 ```
 
-Estas son necesarias para que `ValidationPipe` funcione con los decorators de validación en los DTOs.
+These are necessary for `ValidationPipe` to work with the validation decorators in the DTOs.
 
 ---
 
@@ -433,7 +433,7 @@ Estas son necesarias para que `ValidationPipe` funcione con los decorators de va
 
 ```
 backend/src/
-├── main.ts                          (bootstrap con CORS + ValidationPipe)
+├── main.ts                          (bootstrap with CORS + ValidationPipe)
 ├── app.module.ts                    (imports all modules + ConfigModule)
 ├── app.controller.ts
 ├── app.service.ts

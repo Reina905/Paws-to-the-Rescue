@@ -53,7 +53,7 @@ export const MobileNavbar = ({ isLight, menuOpen, setMenuOpen }) => {
         <button
           className="ml-auto p-2 rounded-lg transition-colors duration-200"
           onClick={() => setMenuOpen((prev) => !prev)}
-          aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
         >
           {menuOpen ? (

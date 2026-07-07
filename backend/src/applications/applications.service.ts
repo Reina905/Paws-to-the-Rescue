@@ -6,10 +6,14 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { SupabaseService } from '../supabase/supabase.service';
+import { BadgesService } from '../badges/badges.service';
 
 @Injectable()
 export class ApplicationsService {
-  constructor(private readonly supabase: SupabaseService) {}
+  constructor(
+    private readonly supabase: SupabaseService,
+    private readonly badgesService: BadgesService,
+  ) {}
 
   async updateStatus(
     applicationId: string,
@@ -62,7 +66,7 @@ export class ApplicationsService {
 
     if (newStatus === 'approved' && oldStatus !== 'approved') {
       if (availableSpaces <= 0) {
-        throw new ConflictException('No hay espacios disponibles');
+        throw new ConflictException('No available spaces');
       }
       availableSpaces -= 1;
     } else if (newStatus === 'rejected' && oldStatus === 'approved') {
@@ -92,6 +96,16 @@ export class ApplicationsService {
       if (updateOppError) {
         console.error('Supabase error:', updateOppError.message);
         throw new InternalServerErrorException('Internal server error');
+      }
+    }
+
+    // 8. Check and award badges if application was approved
+    if (newStatus === 'approved') {
+      try {
+        await this.badgesService.checkAndAwardBadges(application.volunteer_id);
+      } catch (error) {
+        // Log but don't fail the request — badge awarding is non-critical
+        console.error('Badge check failed:', error);
       }
     }
 

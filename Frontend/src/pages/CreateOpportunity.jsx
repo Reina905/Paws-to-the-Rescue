@@ -7,10 +7,10 @@ export const CreateOpportunity = () => {
       <PaddingLayout>
         <div className="max-w-2xl mx-auto">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">
-            Crear Oportunidad de Voluntariado
+            Create Volunteer Opportunity
           </h1>
           <p className="text-gray-600 mb-8">
-            Completa el formulario para publicar una nueva oportunidad y conectar con voluntarios.
+            Fill out the form to publish a new opportunity and connect with volunteers.
           </p>
           <CreateOpportunityForm />
         </div>

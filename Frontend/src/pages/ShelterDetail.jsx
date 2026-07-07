@@ -32,7 +32,7 @@ export const ShelterDetail = () => {
       <MainLayout backgroundType="image" backgroundSrc={ShelterHeroBackground} hero={<div />}>
         {is404 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">Refugio no encontrado.</p>
+            <p className="text-gray-500 text-lg">Shelter not found.</p>
           </div>
         ) : (
           <ErrorMessage message={error} onRetry={refetch} />
@@ -45,7 +45,7 @@ export const ShelterDetail = () => {
     return (
       <MainLayout backgroundType="image" backgroundSrc={ShelterHeroBackground} hero={<div />}>
         <div className="text-center py-12">
-          <p className="text-gray-500 text-lg">Refugio no encontrado.</p>
+          <p className="text-gray-500 text-lg">Shelter not found.</p>
         </div>
       </MainLayout>
     )

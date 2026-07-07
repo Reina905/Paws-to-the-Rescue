@@ -41,7 +41,7 @@ export const VolunteerDashboard = () => {
         ) : profileError ? (
           <div className="bg-white rounded-2xl p-4 border border-primary-light">
             <p className="text-sm text-secondary-dark">
-              ⚠️ Could not load metrics from the server.
+               Could not load metrics from the server.
             </p>
           </div>
         ) : (
