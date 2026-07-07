@@ -1,50 +1,15 @@
-import catImage from "../../assets/HeroStaticResources/AboutUsHeroBackground.PNG"
 import { VolunteeringCard } from "../volunteering/VolunteeringCard"
 import { SectionHeader } from "../../components/SectionHeader"
 import { SecondaryNavLink } from "../../layouts/Navbar/SecondaryNavLink"
 import { ArrowRight } from "lucide-react"
 import { PaddingLayout } from "../../layouts/PaddingLayout"
-
-const MOCK_OPPORTUNITIES = [
-  {
-    id: "h1",
-    image: catImage,
-    category: "Limpieza",
-    shelterName: { name: "Casa Felina BCN", logo: "https://i.pravatar.cc/40" },
-    name: "Limpieza y mantenimiento de instalaciones",
-    location: "Barcelona",
-    date: "12/8/2026",
-    duration: "Domingos 09:00 - 12:00",
-    availableSpaces: 2,
-    totalSpaces: 8,
-  },
-  {
-    id: "h2",
-    image: catImage,
-    category: "Limpieza",
-    shelterName: { name: "Casa Felina BCN", logo: "https://i.pravatar.cc/40" },
-    name: "Limpieza y mantenimiento de instalaciones",
-    location: "Barcelona",
-    date: "12/8/2026",
-    duration: "Domingos 09:00 - 12:00",
-    availableSpaces: 2,
-    totalSpaces: 8,
-  },
-  {
-    id: "h3",
-    image: catImage,
-    category: "Limpieza",
-    shelterName: { name: "Casa Felina BCN", logo: "https://i.pravatar.cc/40" },
-    name: "Limpieza y mantenimiento de instalaciones",
-    location: "Barcelona",
-    date: "12/8/2026",
-    duration: "Domingos 09:00 - 12:00",
-    availableSpaces: 2,
-    totalSpaces: 8,
-  }
-]
+import { useOpportunities } from "../../hooks/useOpportunities"
+import { LoadingSpinner } from "../../components/LoadingSpinner"
+import { ErrorMessage } from "../../components/ErrorMessage"
 
 export const HomeVolunteeringSection = () => {
+  const { data, loading, error, refetch } = useOpportunities()
+
   return (
     <section className=" py-20">
       <SectionHeader
@@ -53,11 +18,15 @@ export const HomeVolunteeringSection = () => {
         className="mb-14"
       />
       <PaddingLayout>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {MOCK_OPPORTUNITIES.map((item) => (
-          <VolunteeringCard key={item.id} {...item} />
-        ))}
-      </div>
+      {loading && <LoadingSpinner />}
+      {error && <ErrorMessage message={error} onRetry={refetch} />}
+      {!loading && !error && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {data?.slice(0, 3).map((item) => (
+            <VolunteeringCard key={item.id} {...item} />
+          ))}
+        </div>
+      )}
 
       <div className="ml-auto flex pt-15 justify-center items-center">
         <SecondaryNavLink to={"/volunteering"} className={"group text-white bg-primary hover:bg-primary-dark"}>

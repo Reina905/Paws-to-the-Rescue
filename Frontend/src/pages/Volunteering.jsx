@@ -1,17 +1,21 @@
-import { MainLayout } from "../layouts/MainLayout"
-import { VolunteeringHero } from "../features/volunteering/VolunteeringHero"
-import { VolunteeringList } from "../features/volunteering/VolunteeringList"
+import { useState } from "react"
 import { SectionHeader } from "../components/SectionHeader"
 import { PaddingLayout } from "../layouts/PaddingLayout"
-import { volunteeringData } from "../services/volunteeringData"
-import VolunteeringHeroBackground from "../assets/HeroStaticResources/VolunteerHelpingWithCleaning.PNG"
+import { VolunteeringList } from "../features/volunteering/VolunteeringList"
+import { LoadingSpinner } from "../components/LoadingSpinner"
+import { ErrorMessage } from "../components/ErrorMessage"
+import { EmptyState } from "../components/EmptyState"
+import { useOpportunities } from "../hooks/useOpportunities"
 import { Navbar } from "../layouts/Navbar/Navbar"
 import { Footer } from "../layouts/Footer"
 
 export const Volunteering = () => {
+  const [filters, setFilters] = useState({})
+  const { data, loading, error, refetch } = useOpportunities(filters)
+
   return (
     <>
-    <Navbar variant="light"/>
+      <Navbar variant="light" />
       <section className="bg-white py-30">
         <PaddingLayout>
           <SectionHeader
@@ -19,10 +23,17 @@ export const Volunteering = () => {
             subtitle="Find active opportunities to help shelters and make a real impact in the lives of rescued cats."
             className="mb-12"
           />
-          <VolunteeringList opportunities={volunteeringData} />
+          {loading && <LoadingSpinner />}
+          {error && <ErrorMessage message={error} onRetry={refetch} />}
+          {!loading && !error && data?.length === 0 && (
+            <EmptyState message="No hay oportunidades disponibles en este momento." />
+          )}
+          {!loading && !error && data?.length > 0 && (
+            <VolunteeringList opportunities={data} />
+          )}
         </PaddingLayout>
       </section>
-      <Footer/>
-      </>
+      <Footer />
+    </>
   )
 }

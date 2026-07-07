@@ -1,68 +1,73 @@
-import { PaddingLayout } from "../layouts/PaddingLayout"
 import { DashboardSidebar } from "../features/volunteerDashboard/DashboardSidebar"
-import { DashboardHeader } from "../features/volunteerDashboard/DashboardHeader"
-import { DashboardProfile } from "../features/volunteerDashboard/DashboardProfile"
-import { DashboardHistory } from "../features/volunteerDashboard/DashboardHistory"
-import { DashboardRecommendations } from "../features/volunteerDashboard/DashboardRecommendations"
-
-const MOCK_VOLUNTEER = {
-  name: "Sarah Jenkins",
-  role: "Kitten Guardian",
-  since: "Oct 2023",
-  totalHours: 128,
-  sheltersAssisted: 12,
-}
-
-const MOCK_HISTORY = [
-  {
-    title: "Socialization Session",
-    location: "Cat Haven",
-    time: "2 days ago",
-    hours: "3 hours",
-    note: "Helped Luna gain confidence and get adopted!",
-  },
-  {
-    title: "Medical Record Updates",
-    location: "Northside Rescue",
-    time: "Last week",
-    hours: "5 hours",
-    note: "Digitized 50+ records for vet team.",
-  },
-]
-
-const MOCK_RECOMMENDATIONS = [
-  {
-    title: "Kitten Nursery Night Shift",
-    location: "Whiskers Way",
-    description: "High-need shift for experienced kitten volunteers.",
-    tag: "New",
-  },
-  {
-    title: "Pet Portrait Session",
-    location: "Valley Rescue",
-    description: "Help take photos of 15 new cats.",
-    simple: true,
-  },
-]
+import { VolunteerDashboardStats } from "../features/volunteerDashboard/VolunteerDashboardStats"
+import { VolunteerRecentRegistrations } from "../features/volunteerDashboard/VolunteerRecentRegistrations"
+import { VolunteerRecentBadges } from "../features/volunteerDashboard/VolunteerRecentBadges"
+import { LoadingSpinner } from "../components/LoadingSpinner"
+import { useVolunteerDashboard, useVolunteerRegistrations, useVolunteerBadges } from "../hooks/useVolunteers"
 
 export const VolunteerDashboard = () => {
+  const { data: volunteer, loading: loadingProfile, error: profileError } = useVolunteerDashboard()
+  const { data: registrations, loading: loadingRegs, error: regsError } = useVolunteerRegistrations()
+  const { data: badges, loading: loadingBadges, error: badgesError } = useVolunteerBadges()
+
+  const volunteerName = volunteer?.name || "Volunteer"
+
+  // Ensure metrics default to 0 when no data exists
+  const displayVolunteer = {
+    totalHours: volunteer?.totalHours ?? 0,
+    sheltersAssisted: volunteer?.sheltersAssisted ?? 0,
+    role: volunteer?.role || "Volunteer",
+    since: volunteer?.since || "—",
+  }
+
   return (
-    <div className="flex min-h-screen bg-[#FFF8F6]">
-      <DashboardSidebar userName={MOCK_VOLUNTEER.name} userRole={MOCK_VOLUNTEER.role} />
+    <div className="flex min-h-screen bg-tertiary-light">
+      <DashboardSidebar userName={volunteerName} />
 
-      <main className="flex-1 md:ml-64">
-        <DashboardHeader userName={MOCK_VOLUNTEER.name} />
+      <main className="flex-1 md:ml-64 p-6 md:p-10">
+        {/* Header */}
+        <div className="mb-10">
+          <h1 className="text-3xl md:text-4xl font-bold text-primary">
+            Welcome back, {volunteerName}
+          </h1>
+          <p className="text-secondary-dark mt-2">
+            Track your volunteer progress and recent activity.
+          </p>
+        </div>
 
-        <PaddingLayout>
-          <DashboardProfile volunteer={MOCK_VOLUNTEER} />
-
-          <div className="grid lg:grid-cols-3 gap-8 mt-10">
-            <div className="lg:col-span-2">
-              <DashboardHistory history={MOCK_HISTORY} />
-            </div>
-            <DashboardRecommendations recommendations={MOCK_RECOMMENDATIONS} />
+        {/* Stats */}
+        {loadingProfile ? (
+          <LoadingSpinner />
+        ) : profileError ? (
+          <div className="bg-white rounded-2xl p-4 border border-primary-light">
+            <p className="text-sm text-secondary-dark">
+              ⚠️ Could not load metrics from the server.
+            </p>
           </div>
-        </PaddingLayout>
+        ) : (
+          <VolunteerDashboardStats volunteer={displayVolunteer} />
+        )}
+
+        {/* Recent Registrations & Badges */}
+        <div className="grid lg:grid-cols-2 gap-8 mt-12">
+          <section>
+            <h2 className="text-2xl font-bold text-primary mb-6">My Registrations</h2>
+            <VolunteerRecentRegistrations
+              registrations={registrations || []}
+              isLoading={loadingRegs}
+              error={regsError}
+            />
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-primary mb-6">Recent Badges</h2>
+            <VolunteerRecentBadges
+              badges={badges || []}
+              isLoading={loadingBadges}
+              error={badgesError}
+            />
+          </section>
+        </div>
       </main>
     </div>
   )

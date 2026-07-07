@@ -41,7 +41,7 @@ export const ShelterDetailHero = ({ shelter }) => {
                 </div>
                 <div className="flex items-center gap-1.5 font-semibold text-primary">
                   <PawPrint size={14} className="shrink-0" />
-                  {shelter.activeVolunteerOpportunities} Active Opportunities
+                  {shelter.opportunities?.length || shelter.activeVolunteerOpportunities || 0} Active Opportunities
                 </div>
               </div>
             </div>

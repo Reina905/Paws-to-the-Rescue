@@ -1,9 +1,8 @@
 import { PaddingLayout } from "../../layouts/PaddingLayout"
 import { SectionHeader } from "../../components/SectionHeader"
 import { SecondaryNavLink } from "../../layouts/Navbar/SecondaryNavLink"
-import VolunteerCleaning from "../../assets/HeroStaticResources/VolunteerHelpingWithCleaning.PNG"
+import VolunteerTakingCareOfACat from "../../assets/StaticResources/VolunteerTakingCareOfACat.PNG"
 import HappyPawsShelter from "../../assets/HeroStaticResources/HappyPawsShelter.PNG"
-
 import { ArrowRight } from "lucide-react"
 
 const STATS = [
@@ -25,16 +24,16 @@ export const JoinCommunity = () => {
         <div className="flex flex-col md:flex-row gap-8">
           <div className="relative h-96 md:h-112 w-full rounded-3xl overflow-hidden shadow-lg group">
             <img
-              src={VolunteerCleaning}
+              src={VolunteerTakingCareOfACat}
               alt="Volunteer helping with cleaning"
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-black/35" />
             <div className="relative z-10 h-full flex flex-col justify-end p-8 text-white">
-              <h3 className="text-2xl font-bold leading-snug text-secondary">
+              <h3 className="text-2xl text-center font-bold leading-snug text-secondary">
                 Become a Volunteer
               </h3>
-              <p className="mt-2 text-sm text-white font-semibold">
+              <p className="mt-2 text-sm text-white text-center font-semibold">
                 Help rescued cats through feeding, cleaning, transportation, fostering, fundraising and many other meaningful activities.
               </p>
               <div className=" flex mt-4 justify-center items-center"> 
@@ -54,10 +53,10 @@ export const JoinCommunity = () => {
             />
             <div className="absolute inset-0 bg-black/35" />
             <div className="relative z-10 h-full flex flex-col justify-end p-8 text-white">
-              <h3 className="text-2xl font-bold leading-snug text-secondary">
+              <h3 className="text-2xl text-center font-bold leading-snug text-secondary">
                 Register Your Shelter
               </h3>
-              <p className="mt-2 text-sm text-white font-semibold">
+              <p className="mt-2 text-sm text-white text-center font-semibold">
                 Connect with passionate volunteers, publish opportunities and receive support from people eager to help rescued cats.
               </p>
               <div className="flex mt-4 justify-center items-center"> 

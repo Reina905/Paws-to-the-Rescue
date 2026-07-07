@@ -1,5 +1,16 @@
-const QuickAction = ({ title, desc }) => (
-  <div className="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer">
+const QuickAction = ({ title, desc, onClick }) => (
+  <div
+    className="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer"
+    onClick={onClick}
+    role="button"
+    tabIndex={0}
+    onKeyDown={(e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault()
+        onClick?.()
+      }
+    }}
+  >
     <p className="font-bold">{title}</p>
     <p className="text-gray-500 text-sm mt-1">{desc}</p>
   </div>

@@ -1,26 +1,69 @@
 import { useParams, useNavigate } from "react-router-dom"
-import { MainLayout } from "../layouts/MainLayout"
 import { PaddingLayout } from "../layouts/PaddingLayout"
 import { VolunteeringDetailCard } from "../features/volunteering/VolunteeringDetailCard"
-import { volunteeringData } from "../services/volunteeringData"
+import { LoadingSpinner } from "../components/LoadingSpinner"
+import { ErrorMessage } from "../components/ErrorMessage"
+import { useOpportunityDetail } from "../hooks/useOpportunities"
 import { Navbar } from "../layouts/Navbar/Navbar"
 import { Footer } from "../layouts/Footer"
 
 export const VolunteeringDetails = () => {
   const { id } = useParams()
   const navigate = useNavigate()
-  const opportunity = volunteeringData.find((item) => item.id === id)
+  const { data: opportunity, loading, error, refetch } = useOpportunityDetail(id)
+
+  if (loading) {
+    return (
+      <>
+        <Navbar variant="light" />
+        <main className="py-24"><PaddingLayout><LoadingSpinner /></PaddingLayout></main>
+        <Footer />
+      </>
+    )
+  }
+
+  if (error) {
+    const is404 = error.includes?.('404') || error.toLowerCase?.().includes?.('not found')
+    return (
+      <>
+        <Navbar variant="light" />
+        <main className="py-24">
+          <PaddingLayout>
+            {is404 ? (
+              <div className="text-center py-12">
+                <p className="text-gray-500 text-lg">Oportunidad no encontrada.</p>
+              </div>
+            ) : (
+              <ErrorMessage message={error} onRetry={refetch} />
+            )}
+          </PaddingLayout>
+        </main>
+        <Footer />
+      </>
+    )
+  }
 
   if (!opportunity) {
-    return <div className="p-10">Opportunity not found</div>
+    return (
+      <>
+        <Navbar variant="light" />
+        <main className="py-24">
+          <PaddingLayout>
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">Oportunidad no encontrada.</p>
+            </div>
+          </PaddingLayout>
+        </main>
+        <Footer />
+      </>
+    )
   }
 
   return (
     <>
-    <Navbar variant="light" />
+      <Navbar variant="light" />
       <main className="py-24">
         <PaddingLayout>
-          {/* Back button */}
           <div className="mb-6">
             <button
               onClick={() => navigate(-1)}
@@ -33,7 +76,7 @@ export const VolunteeringDetails = () => {
           <VolunteeringDetailCard opportunity={opportunity} />
         </PaddingLayout>
       </main>
-      <Footer/>
+      <Footer />
     </>
   )
 }

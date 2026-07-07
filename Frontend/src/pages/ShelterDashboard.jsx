@@ -1,49 +1,71 @@
-import { PaddingLayout } from "../layouts/PaddingLayout"
 import { ShelterDashboardSidebar } from "../features/shelterDashboard/ShelterDashboardSidebar"
-import { ShelterDashboardHeader } from "../features/shelterDashboard/ShelterDashboardHeader"
 import { ShelterDashboardStats } from "../features/shelterDashboard/ShelterDashboardStats"
-import { ShelterDashboardApplications } from "../features/shelterDashboard/ShelterDashboardApplications"
-import { ShelterDashboardQuickActions } from "../features/shelterDashboard/ShelterDashboardQuickActions"
-
-const MOCK_SHELTER = {
-  name: "Happy Paws Shelter",
-  location: "San José, Costa Rica",
-  totalAnimals: 78,
-  volunteers: 54,
-  activeOpportunities: 6,
-  pendingApplications: 12,
-}
-
-const MOCK_APPLICATIONS = [
-  { name: "Laura Martínez", role: "Feeding Volunteer", time: "2 hours ago" },
-  { name: "Carlos Gómez", role: "Cleaning Shift", time: "Yesterday" },
-  { name: "Ana López", role: "Medical Support", time: "2 days ago" },
-]
-
-const MOCK_QUICK_ACTIONS = [
-  { title: "Create Opportunity", desc: "Post a new volunteer shift" },
-  { title: "Review Applications", desc: "Approve pending volunteers" },
-  { title: "View Analytics", desc: "Check shelter performance" },
-]
+import { ShelterDashboardRegistrations } from "../features/shelterDashboard/ShelterDashboardRegistrations"
+import { LoadingSpinner } from "../components/LoadingSpinner"
+import { useShelterDashboard, useShelterRecentRegistrations } from "../hooks/useShelters"
+import { useAuthStore } from "../store/authStore"
 
 export const ShelterDashboard = () => {
+  const { data: stats, loading: loadingStats, error: statsError } = useShelterDashboard()
+  const { data: registrations, loading: loadingRegs, error: regsError } = useShelterRecentRegistrations()
+  const user = useAuthStore((state) => state.user)
+
+  const shelterName = stats?.name || user?.user_metadata?.name || "My Shelter"
+
+  // Default stats so cards always render
+  const displayStats = {
+    totalAnimals: stats?.totalAnimals ?? 0,
+    volunteers: stats?.volunteers ?? 0,
+    activeOpportunities: stats?.activeOpportunities ?? 0,
+  }
+
   return (
-    <div className="flex min-h-screen bg-[#FFF8F6]">
-      <ShelterDashboardSidebar shelterName={MOCK_SHELTER.name} />
+    <div className="flex min-h-screen bg-tertiary-light">
+      <ShelterDashboardSidebar shelterName={shelterName} />
 
-      <main className="flex-1 md:ml-64">
-        <ShelterDashboardHeader />
+      <main className="flex-1 md:ml-64 p-6 md:p-10">
+        {/* Header */}
+        <div className="mb-10">
+          <h1 className="text-3xl md:text-4xl font-bold text-primary">
+            Welcome back, {shelterName}
+          </h1>
+          <p className="text-secondary-dark mt-2">
+            Manage your volunteers, opportunities, and shelter impact.
+          </p>
+        </div>
 
-        <PaddingLayout>
-          <ShelterDashboardStats stats={MOCK_SHELTER} />
-
-          <div className="grid lg:grid-cols-3 gap-8 mt-10">
-            <div className="lg:col-span-2">
-              <ShelterDashboardApplications applications={MOCK_APPLICATIONS} />
-            </div>
-            <ShelterDashboardQuickActions actions={MOCK_QUICK_ACTIONS} />
+        {/* Stats */}
+        {loadingStats ? (
+          <LoadingSpinner />
+        ) : statsError ? (
+          <div className="bg-white rounded-2xl p-4 border border-primary-light">
+            <p className="text-sm text-secondary-dark">
+              ⚠️ Could not load metrics from the server.
+              {statsError.toLowerCase().includes('unauthorized') && (
+                <span> Try signing out and logging in again.</span>
+              )}
+            </p>
           </div>
-        </PaddingLayout>
+        ) : (
+          <ShelterDashboardStats stats={displayStats} />
+        )}
+
+        {/* Recent Registrations */}
+        <section className="mt-12">
+          <h2 className="text-2xl font-bold text-primary mb-6">Recent Volunteer Sign-ups</h2>
+          {loadingRegs ? (
+            <LoadingSpinner />
+          ) : (
+            <ShelterDashboardRegistrations registrations={registrations || []} />
+          )}
+          {regsError && (
+            <div className="mt-4 bg-white rounded-2xl p-4 border border-primary-light">
+              <p className="text-sm text-secondary-dark">
+                ⚠️ Could not load registrations from the server.
+              </p>
+            </div>
+          )}
+        </section>
       </main>
     </div>
   )

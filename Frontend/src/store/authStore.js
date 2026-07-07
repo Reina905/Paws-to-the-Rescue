@@ -1,31 +1,59 @@
 import { create } from 'zustand';
+import { supabase } from '../services/supabaseAuth';
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-}
-
-interface AuthState {
-  user: User | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  setUser: (user: User | null) => void;
-  logout: () => void;
-}
-
-export const useAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create((set, get) => ({
   user: null,
+  session: null,
   isAuthenticated: false,
-  isLoading: true, // Inicia en true mientras verificamos el backend
-  setUser: (user) => set({ 
-    user, 
-    isAuthenticated: !!user, 
-    isLoading: false 
-  }),
-  logout: () => {
-    // Si usas JWT en LocalStorage, lo eliminas aquí:
-    localStorage.removeItem('token'); 
-    set({ user: null, isAuthenticated: false, isLoading: false });
+  isLoading: true,
+  role: null,
+  // Flag to prevent GuestRoute redirect during signup flow
+  isSigningUp: false,
+
+  setIsSigningUp: (value) => set({ isSigningUp: value }),
+
+  setSession: (session) => {
+    const user = session?.user ?? null;
+    const role = user?.user_metadata?.role ?? user?.app_metadata?.role ?? null;
+    set({
+      session,
+      user,
+      isAuthenticated: !!session,
+      role,
+      isLoading: false,
+    });
+  },
+
+  logout: async () => {
+    await supabase.auth.signOut();
+    set({ user: null, session: null, isAuthenticated: false, role: null, isLoading: false });
+  },
+
+  initialize: async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    const user = session?.user ?? null;
+    const role = user?.user_metadata?.role ?? user?.app_metadata?.role ?? null;
+    set({
+      session,
+      user,
+      isAuthenticated: !!session,
+      role,
+      isLoading: false,
+    });
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      // Don't update auth state during signup to prevent premature redirect
+      if (get().isSigningUp) return;
+
+      const user = session?.user ?? null;
+      const newRole = user?.user_metadata?.role ?? user?.app_metadata?.role ?? null;
+      set({
+        session,
+        user,
+        isAuthenticated: !!session,
+        role: newRole || get().role, // preserve existing role if new session doesn't include it
+        isLoading: false,
+      });
+    });
   },
 }));

@@ -1,9 +1,8 @@
 import { PaddingLayout } from "../../layouts/PaddingLayout"
 import { SectionHeader } from "../../components/SectionHeader"
-
 import missionImg from "../../assets/HeroStaticResources/VolunteerHelpingWithCleaning.PNG"
-import visionImg from "../../assets/HeroStaticResources/HappyPawsShelter.PNG"
-import communityImg from "../../assets/HeroStaticResources/AboutUsHeroBackground.PNG"
+import visionImg from "../../assets/StaticResources/CatWithItsOwner.jpg"
+import valuesImg from "../../assets/StaticResources/VolunteerBathingACat.png"
 
 const PILLARS = [
   {
@@ -19,10 +18,10 @@ const PILLARS = [
     image: visionImg,
   },
   {
-    title: "Community",
+    title: "Values",
     description:
       "We believe lasting change happens when people work together with kindness and dedication.",
-    image: communityImg,
+    image: valuesImg,
   },
 ]
 
@@ -31,10 +30,9 @@ export const AboutPillars = () => {
     <section className="bg-white py-20">
       <PaddingLayout>
         <SectionHeader
-          label="What Drives Us"
           title="Our Mission, Vision and Values"
           subtitle="Everything we do is guided by a clear purpose — giving rescued cats a second chance and building a community that cares."
-          className="mb-16"
+          className="mb-10"
         />
 
         <div className="flex flex-col md:flex-row gap-5">
@@ -50,10 +48,10 @@ export const AboutPillars = () => {
               />
               <div className="absolute inset-0 bg-black/35" />
               <div className="relative z-10 h-full flex flex-col justify-end p-8 text-white">
-                <h3 className="text-2xl font-bold leading-snug text-secondary">
+                <h3 className="text-2xl text-center font-bold leading-snug text-secondary">
                   {title}
                 </h3>
-                <p className="mt-2 text-sm text-white leading-7">
+                <p className="mt-2 text-sm text-center font-semibold text-white leading-7">
                   {description}
                 </p>
               </div>

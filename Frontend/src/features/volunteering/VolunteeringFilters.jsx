@@ -1,16 +1,19 @@
-import { Search, X } from "lucide-react"
+import { Search, X, ChevronDown } from "lucide-react"
 
-const FilterPill = ({ active, label, onClick }) => (
-  <button
-    onClick={onClick}
-    className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-200 border ${
-      active
-        ? "bg-primary text-white border-primary"
-        : "bg-white text-secondary-dark border-primary-light hover:border-primary hover:text-primary"
-    }`}
-  >
-    {label}
-  </button>
+const SelectFilter = ({ value, onChange, options, placeholder }) => (
+  <div className="relative sm:w-44">
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="w-full appearance-none pl-3.5 pr-9 py-2.5 rounded-xl bg-white text-sm text-secondary-dark shadow-sm shadow-primary-light/40 hover:shadow-md hover:shadow-primary-light/50 focus:outline-none focus:shadow-md focus:shadow-primary-light/60 transition-shadow cursor-pointer"
+    >
+      <option value="All">{placeholder}</option>
+      {options.map((opt) => (
+        <option key={opt} value={opt}>{opt}</option>
+      ))}
+    </select>
+    <ChevronDown size={15} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-tertiary pointer-events-none" />
+  </div>
 )
 
 export const VolunteeringFilters = ({
@@ -36,52 +39,58 @@ export const VolunteeringFilters = ({
   return (
     <div className="flex flex-col gap-4 mb-10">
 
-      {/* Search bar */}
-      <div className="relative max-w-lg">
-        <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-tertiary pointer-events-none" />
-        <input
-          type="text"
-          placeholder="Search by title, shelter or location…"
-          value={search}
-          onChange={(e) => onSearchChange(e.target.value)}
-          className="w-full pl-11 pr-10 py-3 rounded-full border border-primary-light text-sm text-primary placeholder:text-tertiary bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-primary transition"
+      {/* Search + filters row */}
+      <div className="flex flex-col sm:flex-row gap-3">
+        <div className="relative flex-1">
+          <Search size={17} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-tertiary pointer-events-none" />
+          <input
+            type="text"
+            placeholder="Search by title, shelter or location…"
+            value={search}
+            onChange={(e) => onSearchChange(e.target.value)}
+            className="w-full pl-10 pr-9 py-2.5 rounded-xl bg-white text-sm text-secondary-dark placeholder:text-text-primary shadow-sm shadow-primary-light/40 hover:shadow-md hover:shadow-primary-light/50 focus:outline-none focus:shadow-md focus:shadow-primary-light/60 transition-shadow"
+          />
+          {search && (
+            <button
+              onClick={() => onSearchChange("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-tertiary hover:text-primary"
+            >
+              <X size={14} />
+            </button>
+          )}
+        </div>
+
+        <SelectFilter
+          value={activeCategory}
+          onChange={onCategoryChange}
+          options={categories}
+          placeholder="All categories"
         />
-        {search && (
-          <button
-            onClick={() => onSearchChange("")}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-tertiary hover:text-primary"
-          >
-            <X size={14} />
-          </button>
-        )}
+
+        <SelectFilter
+          value={activeLocation}
+          onChange={onLocationChange}
+          options={locations}
+          placeholder="All locations"
+        />
       </div>
 
-      {/* Category + Location filters */}
-      <div className="flex flex-wrap items-center gap-3">
-        <span className="text-xs font-semibold text-tertiary uppercase tracking-wider">Category</span>
-        {["All", ...categories].map((cat) => (
-          <FilterPill key={cat} label={cat} active={activeCategory === cat} onClick={() => onCategoryChange(cat)} />
-        ))}
-
-        <div className="w-px h-5 bg-primary-light mx-1" />
-
-        <span className="text-xs font-semibold text-tertiary uppercase tracking-wider">Location</span>
-        {["All", ...locations].map((loc) => (
-          <FilterPill key={loc} label={loc} active={activeLocation === loc} onClick={() => onLocationChange(loc)} />
-        ))}
-
+      {/* Result count + clear */}
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-text-primary">
+          <span className="font-semibold text-secondary-dark">{totalResults}</span>{" "}
+          {totalResults === 1 ? "opportunity" : "opportunities"} found
+        </p>
         {hasActiveFilters && (
-          <button onClick={clearAll} className="ml-2 flex items-center gap-1.5 text-xs font-semibold text-primary-dark hover:text-primary transition">
-            <X size={12} />
-            Clear all
+          <button
+            onClick={clearAll}
+            className="flex items-center gap-1.5 text-sm font-medium text-primary-dark hover:text-primary transition-colors"
+          >
+            <X size={13} />
+            Clear filters
           </button>
         )}
       </div>
-
-      {/* Result count */}
-      <p className="text-sm text-secondary-dark">
-        {totalResults} {totalResults === 1 ? "opportunity" : "opportunities"} found
-      </p>
     </div>
   )
 }

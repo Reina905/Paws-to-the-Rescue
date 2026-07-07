@@ -1,8 +1,9 @@
-import VolunteerFeedingCats from "../../assets/HeroStaticResources/AboutUsHeroBackground.PNG"
+import VolunterFeedingCats from "../../assets/StaticResources/VolunterFeedingCats.PNG"
 import { PaddingLayout } from "../../layouts/PaddingLayout"
 import { SectionHeader } from "../../components/SectionHeader"
 import { SecondaryNavLink } from "../../layouts/Navbar/SecondaryNavLink"
 import { ArrowRight } from "lucide-react"
+import GrayCatWithAHeart from '../../assets/CartoonResources/GrayCatHeart.png'
 
 export const HomeAboutPreview = () => {
   return (
@@ -14,10 +15,11 @@ export const HomeAboutPreview = () => {
             {/* Image */}
             <div className="relative md:w-2/5">
               <img
-                src={VolunteerFeedingCats}
+                src={VolunterFeedingCats}
                 alt="Volunteer feeding rescued cats"
                 className="w-full h-96 object-cover rounded-3xl shadow-2xl"
               />
+               <img src={GrayCatWithAHeart} className="absolute -bottom-5 -right-8 h-20"></img>
             </div>
 
             {/* Text */}

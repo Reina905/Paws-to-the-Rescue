@@ -1,56 +1,60 @@
+import { useParams } from "react-router-dom"
 import { MainLayout } from "../layouts/MainLayout"
 import { ShelterDetailHero } from "../features/shelters/ShelterDetailHero"
 import { ShelterOpportunities } from "../features/shelters/ShelterOpportunities"
+import { LoadingSpinner } from "../components/LoadingSpinner"
+import { ErrorMessage } from "../components/ErrorMessage"
+import { useShelterDetail } from "../hooks/useShelters"
 import ShelterHeroBackground from "../assets/HeroStaticResources/HappyPawsShelter.PNG"
-
-const MOCK_SHELTER = {
-  id: 1,
-  name: "Happy Paws Shelter",
-  logo: "https://i.pravatar.cc/120?img=12",
-  description:
-    "A nonprofit shelter dedicated to rescuing abandoned and injured cats while helping them find loving homes. Our mission is to ensure every cat receives proper care, medical attention and a safe environment.",
-  contactNumber: "+1 (555) 123-4567",
-  location: "San José, Costa Rica",
-  animalCapacity: 80,
-  activeVolunteerOpportunities: 3,
-}
-
-const MOCK_OPPORTUNITIES = [
-  {
-    id: "sd1",
-    image: ShelterHeroBackground,
-    category: "Care",
-    shelterName: { name: MOCK_SHELTER.name, logo: MOCK_SHELTER.logo },
-    name: "Feeding and daily care for rescued cats",
-    location: MOCK_SHELTER.location,
-    date: "Every weekend",
-    duration: "Weekends 09:00 - 12:00",
-    availableSpaces: 3,
-    totalSpaces: 5,
-  },
-  {
-    id: "sd2",
-    image: ShelterHeroBackground,
-    category: "Cleaning",
-    shelterName: { name: MOCK_SHELTER.name, logo: MOCK_SHELTER.logo },
-    name: "Cleaning and maintenance of shelter areas",
-    location: MOCK_SHELTER.location,
-    date: "Every Sunday",
-    duration: "Sundays 10:00 - 13:00",
-    availableSpaces: 5,
-    totalSpaces: 6,
-  },
-]
+import { Navbar } from "../layouts/Navbar/Navbar"
+import { Footer } from "../layouts/Footer"
+import { PaddingLayout } from "../layouts/PaddingLayout"
 
 export const ShelterDetail = () => {
+  const { id } = useParams()
+  const { data: shelter, loading, error, refetch } = useShelterDetail(id)
+
+  if (loading) {
+    return (
+      <> 
+      <Navbar variant="light" />
+      <PaddingLayout > 
+        <LoadingSpinner />
+        </PaddingLayout>
+      <Footer/>
+      </>
+    )
+  }
+
+  if (error) {
+    const is404 = error.includes?.('404') || error.toLowerCase?.().includes?.('not found')
+    return (
+      <MainLayout backgroundType="image" backgroundSrc={ShelterHeroBackground} hero={<div />}>
+        {is404 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-500 text-lg">Refugio no encontrado.</p>
+          </div>
+        ) : (
+          <ErrorMessage message={error} onRetry={refetch} />
+        )}
+      </MainLayout>
+    )
+  }
+
+  if (!shelter) {
+    return (
+      <MainLayout backgroundType="image" backgroundSrc={ShelterHeroBackground} hero={<div />}>
+        <div className="text-center py-12">
+          <p className="text-gray-500 text-lg">Refugio no encontrado.</p>
+        </div>
+      </MainLayout>
+    )
+  }
+
   return (
-    <MainLayout
-      backgroundType="image"
-      backgroundSrc={ShelterHeroBackground}
-      hero={<div />}
-    >
-      <ShelterDetailHero shelter={MOCK_SHELTER} />
-      <ShelterOpportunities opportunities={MOCK_OPPORTUNITIES} />
+    <MainLayout backgroundType="image" backgroundSrc={ShelterHeroBackground} hero={<div />}>
+      <ShelterDetailHero shelter={shelter} />
+      <ShelterOpportunities opportunities={shelter.opportunities || []} shelter={shelter} />
     </MainLayout>
   )
 }

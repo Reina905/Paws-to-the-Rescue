@@ -52,12 +52,14 @@ export const VolunteeringCard = ({ id, shelterName, name, image, category, total
               {location}
             </li>
             <li className="flex items-center gap-2">
-              <img
-                src={shelterName.logo}
-                alt={shelterName.name}
-                className="w-4 h-4 rounded-full object-cover shrink-0"
-              />
-              <span className="truncate">{shelterName.name}</span>
+              {shelterName?.logo && (
+                <img
+                  src={shelterName.logo}
+                  alt={shelterName?.name || ''}
+                  className="w-4 h-4 rounded-full object-cover shrink-0"
+                />
+              )}
+              <span className="truncate">{shelterName?.name || 'Unknown Shelter'}</span>
             </li>
           </ul>
 
