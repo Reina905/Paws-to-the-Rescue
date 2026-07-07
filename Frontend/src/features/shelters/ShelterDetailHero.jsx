@@ -1,6 +1,7 @@
 import { MapPin, Phone, Users, PawPrint } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { PaddingLayout } from "../../layouts/PaddingLayout"
+import DefaultShelterImg from "../../assets/StaticResources/GenericShelter.PNG"
 
 export const ShelterDetailHero = ({ shelter }) => {
   const navigate = useNavigate()
@@ -18,7 +19,7 @@ export const ShelterDetailHero = ({ shelter }) => {
         <div className="bg-white rounded-3xl shadow-md p-8 md:p-12">
           <div className="flex flex-col md:flex-row items-start md:items-center gap-8">
             <img
-              src={shelter.logo}
+              src={shelter.logo || DefaultShelterImg}
               alt={shelter.name}
               className="w-24 h-24 rounded-full object-cover border-4 border-secondary shadow-md shrink-0"
             />

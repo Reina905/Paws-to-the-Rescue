@@ -2,6 +2,7 @@ import { Link } from "react-router-dom"
 import LocationIcon from "../../assets/CartoonResources/LocationIcon.png"
 import DateIcon from "../../assets/CartoonResources/DateIcon.png"
 import DurationIcon from "../../assets/CartoonResources/DurationIcon.png"
+import DefaultOpportunityImg from "../../assets/StaticResources/GroupOfVolunteers.PNG"
 import { formatDate } from "../../utils/formatDate"
 
 export const VolunteeringCard = ({ id, shelterName, name, image, category, totalSpaces, availableSpaces, date, duration, location }) => {
@@ -16,7 +17,7 @@ export const VolunteeringCard = ({ id, shelterName, name, image, category, total
         {/* Image */}
         <div className="relative h-48 overflow-hidden">
           <img
-            src={image}
+            src={image || DefaultOpportunityImg}
             alt={name}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
 import LocationIcon from "../../assets/CartoonResources/LocationIcon.png"
+import DefaultShelterImg from "../../assets/StaticResources/GenericShelter.PNG"
 
 export const ShelterCard = ({ shelter }) => {
   return (
@@ -9,7 +10,7 @@ export const ShelterCard = ({ shelter }) => {
         {/* Image */}
         <div className="relative h-48 overflow-hidden bg-secondary-light">
           <img
-            src={shelter.logo}
+            src={shelter.logo || DefaultShelterImg}
             alt={shelter.name}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />

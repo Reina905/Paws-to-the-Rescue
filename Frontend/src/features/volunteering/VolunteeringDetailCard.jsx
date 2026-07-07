@@ -1,5 +1,6 @@
 import { ApplyButton } from './ApplyButton';
 import { formatDate } from "../../utils/formatDate"
+import DefaultOpportunityImg from "../../assets/StaticResources/GroupOfVolunteers.PNG"
 
 export const VolunteeringDetailCard = ({ opportunity }) => {
   const shelterDisplay = opportunity.shelterName?.name || 'Unknown Shelter';
@@ -7,7 +8,7 @@ export const VolunteeringDetailCard = ({ opportunity }) => {
   return (
     <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
       <img
-        src={opportunity.image}
+        src={opportunity.image || DefaultOpportunityImg}
         className="w-full h-96 object-cover"
         alt={opportunity.name}
       />
